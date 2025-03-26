@@ -21,6 +21,7 @@ class Grid:
 
     def display(self):
         #print the grid with colors
+        '''
         print("------------")
         row = ""
         for i in range(0, self.size):
@@ -44,7 +45,8 @@ class Grid:
         # easy way to print the grid
         # for row in self.grid:
         #     print(row)
-        # print("\n")
+        # print("\n")'''
+        pass
 
     # Can be used to debug, check if the grid is correct
     def checkgrid(self, round):

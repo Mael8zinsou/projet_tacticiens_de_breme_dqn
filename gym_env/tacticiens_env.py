@@ -120,7 +120,7 @@ class TacticiensEnv(gym.Env):
         # Convertir l'action en mouvement
         move = self._action_to_move(action)
         if not move:
-            return self._get_observation(), -1, False, {'valid_moves': len(self.valid_moves)}
+            return self._get_observation(), -5, False, {'valid_moves': len(self.valid_moves)}
 
         # Exécuter le mouvement du joueur
         color, piece_type, x, y = move
@@ -151,6 +151,7 @@ class TacticiensEnv(gym.Env):
 
             # Incrémenter le compteur de tours
             self.turn_counter += 1
+            print(" coup joue par l'ia dqn")
 
         # Si le joueur a gagné, terminer l'épisode
         if win:
@@ -163,11 +164,11 @@ class TacticiensEnv(gym.Env):
             ]
             self.data_manager.write(ai, self.player_color, self.turn_counter, self.game.num_retreat, final_stack)
 
-            return self._get_observation(), 100, True, {'win': True, 'valid_moves': len(self.valid_moves)}
+            return self._get_observation(), 10, True, {'win': True, 'valid_moves': len(self.valid_moves)}
 
         # Si le mouvement a échoué, pénaliser le joueur
         if not success:
-            return self._get_observation(), -1, False, {'invalid_move': True, 'valid_moves': len(self.valid_moves)}
+            return self._get_observation(), -5, False, {'invalid_move': True, 'valid_moves': len(self.valid_moves)}
 
         # Vérifier si le jeu est en retraite
         with open(self.move_log_filename, mode='r', newline='') as file:
@@ -206,6 +207,7 @@ class TacticiensEnv(gym.Env):
 
                 # Incrémenter le compteur de tours
                 self.turn_counter += 1
+                print(" coup joue par l'ia adverse")
 
             # Si l'adversaire a gagné, terminer l'épisode
             if opponent_win:
@@ -218,7 +220,7 @@ class TacticiensEnv(gym.Env):
                 ]
                 self.data_manager.write(ai, self.opponent_color, self.turn_counter, self.game.num_retreat, final_stack)
 
-                return self._get_observation(), -100, True, {'opponent_win': True, 'valid_moves': len(self.valid_moves)}
+                return self._get_observation(), -10, True, {'opponent_win': True, 'valid_moves': len(self.valid_moves)}
 
         # Vérifier si le jeu est en retraite après le mouvement de l'adversaire
         with open(self.move_log_filename, mode='r', newline='') as file:
@@ -268,14 +270,15 @@ class TacticiensEnv(gym.Env):
     def _calculate_reward(self, success, win):
         """Calcule la récompense en fonction du résultat du mouvement"""
         if win:
-            return 100  # Victoire
+            return 10  # Victoire
         elif success:
             # Récompense basée sur l'évaluation du plateau
-            eval_score = self.game.evaluateClassic(self.player_color)
+            #eval_score = self.game.evaluateClassic(self.player_color)
             # Normaliser le score pour éviter des valeurs trop grandes
-            return min(max(eval_score / 1000, -10), 10)  # Limiter entre -10 et 10
+            #return min(max(eval_score / 1000, -10), 10)  # Limiter entre -10 et 10
+            return 0
         else:
-            return -1  # Mouvement invalide
+            return -5  # Mouvement invalide
 
     def _encode_state(self):
         """Encode l'état du jeu en un tableau numpy pour l'observation"""
@@ -294,8 +297,9 @@ class TacticiensEnv(gym.Env):
 
     def render(self, mode='human'):
         """Affiche l'état actuel du jeu"""
-        if mode == 'human':
+        if mode == 'human' and getattr(self, 'display_grid', False):
             self.game.grid.display()
+            
         return self._get_observation()
 
     def close(self):

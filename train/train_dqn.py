@@ -69,11 +69,15 @@ class DQNAgent:
         # Sinon, choisir l'action avec la plus grande valeur Q parmi les actions valides
         return max(valid_q_values, key=lambda x: x[1])[0]
 
-    def replay(self, batch_size):
+    def replay(self, batch_size ):
+        
         # Entraîner le modèle sur un mini-batch d'expériences
         if len(self.memory) < batch_size:
             return
-
+        
+        
+        print("entrainement de l'agent")
+        
         minibatch = random.sample(self.memory, batch_size)
         for state, action, reward, next_state, done in minibatch:
             target = reward
@@ -98,7 +102,7 @@ class DQNAgent:
     def save(self, name):
         self.model.save_weights(name)
 
-def train_dqn(episodes=1000, batch_size=32, update_target_every=10):
+def train_dqn(episodes=10, batch_size=32, update_target_every=10):
     # Créer l'environnement
     env = TacticiensEnv(opponent_type='random')
 
@@ -124,6 +128,9 @@ def train_dqn(episodes=1000, batch_size=32, update_target_every=10):
         state = env.reset()
         done = False
         score = 0
+        
+        # Afficher le début de l'épisode
+        print(f"Début de l'épisode {e+1}/{episodes}...")
 
         # Jouer un épisode
         while not done:
@@ -142,8 +149,12 @@ def train_dqn(episodes=1000, batch_size=32, update_target_every=10):
             # Accumuler le score
             score += reward
 
-            # Entraîner le modèle
-            agent.replay(batch_size)
+            
+            # Entraîner le modèle tout les 2 episodes
+            if e % 2 == 0 and e != 0:
+                agent.replay(batch_size)
+            
+            print(f"Action: {action}, Reward: {reward}, Done: {done} , episode: {e}")
 
         # Mettre à jour le modèle cible périodiquement
         if e % update_target_every == 0:
@@ -189,7 +200,7 @@ def train_dqn(episodes=1000, batch_size=32, update_target_every=10):
 
 if __name__ == "__main__":
     # Définir les paramètres d'entraînement
-    episodes = 1000
+    episodes = 10
     batch_size = 32
     update_target_every = 10
 
