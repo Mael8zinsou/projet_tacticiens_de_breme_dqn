@@ -14,8 +14,10 @@ from data.data_manager import DataManager
 from ai.Minimax import Minimax
 from ai.dummyAI import Dummyai
 import copy
+from gymnasium import Env  # Remplacez gym par gymnasium
+from gymnasium.spaces import Discrete, Box
 
-class TacticiensEnv(gym.Env):
+class TacticiensEnv(Env):
     """Environnement OpenAI Gym pour le jeu 'Les Tacticiens de Brême'"""
 
     def __init__(self, opponent_type='random', player_color='blue'):
@@ -42,11 +44,13 @@ class TacticiensEnv(gym.Env):
 
         # Définition de l'espace d'observation
         # Représentation du plateau 5x5 avec 8 canaux (4 types de pièces x 2 couleurs)
-        self.observation_space = spaces.Box(low=0, high=1, shape=(5, 5, 8), dtype=np.int8)
+        #self.observation_space = spaces.Box(low=0, high=1, shape=(5, 5, 8), dtype=np.int8)
+        self.observation_space = Box(low=0, high=1, shape=(5, 5, 8), dtype=np.int8)
 
         # Définition de l'espace d'action
         # Action discrète représentant l'index du mouvement dans la liste des mouvements possibles
-        self.action_space = spaces.Discrete(100)  # Nombre maximal estimé de mouvements possibles
+        #self.action_space = spaces.Discrete(100)  # Nombre maximal estimé de mouvements possibles
+        self.action_space = Discrete(100)  # Nombre maximal estimé de mouvements possibles
 
         # Stockage des mouvements valides pour l'état actuel
         self.valid_moves = []
@@ -70,8 +74,9 @@ class TacticiensEnv(gym.Env):
             writer = csv.writer(file)
             writer.writerow(["Color", "Pawn", "X", "Y", "Turn"])  # Write header row
 
-    def reset(self):
+    def reset(self, *,seed=None, options=None):
         """Réinitialise l'environnement et retourne l'observation initiale"""
+        super().reset(seed=seed)
         # Réinitialiser le data_manager
         self.data_manager = DataManager(False)
 
@@ -98,7 +103,7 @@ class TacticiensEnv(gym.Env):
         # Obtenir les mouvements valides
         self.valid_moves = self.game.all_next_moves(self.player_color)
 
-        return self._get_observation()
+        return self._get_observation() , {}
 
     def step(self, action):
         """
@@ -120,7 +125,7 @@ class TacticiensEnv(gym.Env):
         # Convertir l'action en mouvement
         move = self._action_to_move(action)
         if not move:
-            return self._get_observation(), -5, False, {'valid_moves': len(self.valid_moves)}
+            return self._get_observation(), -5, True, False ,{'valid_moves': len(self.valid_moves)}
 
         # Exécuter le mouvement du joueur
         color, piece_type, x, y = move
@@ -151,7 +156,7 @@ class TacticiensEnv(gym.Env):
 
             # Incrémenter le compteur de tours
             self.turn_counter += 1
-            print(" coup joue par l'ia dqn")
+            #print(" coup joue par l'ia dqn")
 
         # Si le joueur a gagné, terminer l'épisode
         if win:
@@ -164,11 +169,13 @@ class TacticiensEnv(gym.Env):
             ]
             self.data_manager.write(ai, self.player_color, self.turn_counter, self.game.num_retreat, final_stack)
 
-            return self._get_observation(), 10, True, {'win': True, 'valid_moves': len(self.valid_moves)}
+            return self._get_observation(), 10, True, False ,{'win': True, 'valid_moves': len(self.valid_moves)}
+            #return self._get_observation(), reward, True, False ,{'valid_moves': len(self.valid_moves)}
 
         # Si le mouvement a échoué, pénaliser le joueur
         if not success:
-            return self._get_observation(), -5, False, {'invalid_move': True, 'valid_moves': len(self.valid_moves)}
+            #return self._get_observation(), -5, False, False ,{'invalid_move': True, 'valid_moves': len(self.valid_moves)}
+            return self._get_observation(), reward, True, False ,{'valid_moves': len(self.valid_moves)}
 
         # Vérifier si le jeu est en retraite
         with open(self.move_log_filename, mode='r', newline='') as file:
@@ -207,7 +214,7 @@ class TacticiensEnv(gym.Env):
 
                 # Incrémenter le compteur de tours
                 self.turn_counter += 1
-                print(" coup joue par l'ia adverse")
+                #print(" coup joue par l'ia adverse")
 
             # Si l'adversaire a gagné, terminer l'épisode
             if opponent_win:
@@ -220,7 +227,8 @@ class TacticiensEnv(gym.Env):
                 ]
                 self.data_manager.write(ai, self.opponent_color, self.turn_counter, self.game.num_retreat, final_stack)
 
-                return self._get_observation(), -10, True, {'opponent_win': True, 'valid_moves': len(self.valid_moves)}
+                #return self._get_observation(), -10, True, False ,{'opponent_win': True, 'valid_moves': len(self.valid_moves)}
+                return self._get_observation(), reward, True, False ,{'valid_moves': len(self.valid_moves)}
 
         # Vérifier si le jeu est en retraite après le mouvement de l'adversaire
         with open(self.move_log_filename, mode='r', newline='') as file:
@@ -238,7 +246,8 @@ class TacticiensEnv(gym.Env):
         # Vérifier si l'épisode est terminé
         done = win or (opponent_move and opponent_win) or len(self.valid_moves) == 0 or self.game.grid.isbroken
 
-        return self._get_observation(), reward, done, {'valid_moves': len(self.valid_moves)}
+        #return self._get_observation(), reward, done, False ,{'valid_moves': len(self.valid_moves)}
+        return self._get_observation(), reward, True, False ,{'valid_moves': len(self.valid_moves)}
 
     def _get_observation(self):
         """Convertit l'état du jeu en observation pour l'agent"""

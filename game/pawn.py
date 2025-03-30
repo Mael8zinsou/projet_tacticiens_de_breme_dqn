@@ -37,12 +37,14 @@ class Pawn:
                 # Check if the game is won
                 if len(grid.grid[y][x]) == 4:
                     if not simulate:
-                        print("moving", self.mouvement)
+                        #print("moving", self.mouvement)
+                        pass
                     return [True, True]
                 # Check if the pawn moved successfully
                 else:
                     if not simulate:
-                        print("moving", self.mouvement)
+                        #print("moving", self.mouvement)
+                        pass
                     return [True, False]
                 
             # If the mouvement is not legit

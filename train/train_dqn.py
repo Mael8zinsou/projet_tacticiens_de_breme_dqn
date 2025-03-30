@@ -80,6 +80,7 @@ class DQNAgent:
         
         minibatch = random.sample(self.memory, batch_size)
         for state, action, reward, next_state, done in minibatch:
+            start_time = time.time()  # Démarrer le timer
             target = reward
             if not done:
                 # Utiliser le modèle cible pour calculer la valeur Q future
@@ -91,6 +92,9 @@ class DQNAgent:
 
             # Entraîner le modèle
             self.model.fit(np.expand_dims(state, axis=0), target_f, epochs=1, verbose=0)
+            
+            end_time = time.time()  # Arrêter le timer
+            print(f"Temps d'entraînement pour ce mini-batch : {end_time - start_time:.4f} secondes")
 
         # Réduire epsilon pour diminuer l'exploration au fil du temps
         if self.epsilon > self.epsilon_min:
