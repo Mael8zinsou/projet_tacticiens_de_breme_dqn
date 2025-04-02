@@ -10,7 +10,7 @@ from datetime import datetime
 # Parameters
 manual_mode = True     # True if we want to place the pawns manually, False if we want to place them randomly
 use_ai = True           # True if we want to use AI, False if we want to play manually
-ai_types = (1, 1)       # 1 for Minimax, 2 for random AI
+ai_types = (1, 2)       # 1 for Minimax, 2 for random AI
 
 
 def main():

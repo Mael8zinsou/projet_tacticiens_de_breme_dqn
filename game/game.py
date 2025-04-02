@@ -1,45 +1,36 @@
+import numpy as np
 from game.pawn import Pawn
 from game.grid import Grid
 from game.mouvement import Mouvement
-import numpy as np
 from game.env_var import *
 import copy
 
-
-def get_user_input(message, valid_inputs):
-    user_input = None
-    while user_input not in valid_inputs:
-        user_input = input(message)
-        if user_input not in valid_inputs:
-            print("Invalid input")
-    return user_input
+# Constantes
+STACK_MULTIPLIER = 2000
+WINNING_STACK_BONUS = 10000
+BONUS_COLOR = 500
+THREAT_MULTIPLIER = 500
+MAX_GRID_SIZE = 5
 
 
 class Game:
     def __init__(self, data_manager=None, manual_mode=False, use_ai=False, ai_types=None):
-        # Data manager instance
+        """
+        Initialise le jeu.
+        Utilisée dans main.py pour créer une instance de jeu.
+        """
         self.data_manager = data_manager
-        # List of pawns
         self.pawns = []
         self.num_retreat = 0
-
         self.mode = manual_mode
-
-        # custom parameters for the game
+        self.initializing = True
         self.use_ai = use_ai
         self.ai_types = ai_types if ai_types else (0, 0)
+        self.winner = None  # Ajout d'un attribut pour stocker le gagnant
 
         if manual_mode:
             manual_placement = get_user_input("\nDo you want to place the pawns manually ? (y/n): ",
-                                              ["y", "Y", "n", "N"])
-            if use_ai:
-                ai_type_1 = get_user_input("\nType of AI 1 (1:MinMax or 2:Random): ", ["1", "2"])
-                ai_type_2 = get_user_input("\nType of AI 2 (1:MinMax or 2:Random): ", ["1", "2"])
-                self.ai_types = (int(ai_type_1), int(ai_type_2))
-
-            print("AI types:", self.ai_types)
-            print("Manual placement:", manual_placement)
-
+                                             ["y", "Y", "n", "N"])
             if manual_placement.lower() == "n":
                 self.init_pawns("blue")
                 self.init_pawns("orange")
@@ -48,471 +39,416 @@ class Game:
         else:
             if not ai_types:
                 raise ValueError("AI types must be specified when manual mode is False")
-            
             self.init_infinite()
 
         # Init the grid and display it
-        #self.initializing = True
-        #self.init_ai()
-
-        # Init the grid and display it
-        self.grid = Grid(5, self.pawns)
-        #self.grid.grid[4][4] = np.array([0])
+        self.grid = Grid(MAX_GRID_SIZE, self.pawns)
         self.grid.display()
-    
-    # Reset the game
+
     def reset(self):
+        """
+        Réinitialise le jeu.
+        Utilisée dans main.py pour recommencer une partie.
+        """
         self.pawns = []
         self.num_retreat = 0
+        self.initializing = True
+        self.winner = None
         self.init_infinite()
-        self.grid = Grid(5, self.pawns)
+        self.grid = Grid(MAX_GRID_SIZE, self.pawns)
         self.grid.display()
 
-    # Init the AI pawns
+    # ------------------------------
+    # Initialisation des pions
+    # ------------------------------
+
     def init_infinite(self):
+        """
+        Initialise les pions pour les deux joueurs.
+        Utilisée dans main.py indirectement via reset().
+        """
         self.init_pawns("blue")
         self.init_pawns("orange")
         self.use_ai = True
 
-    # Init the pawns manually
+    def init_pawns(self, color):
+        """
+        Place les pions automatiquement sur le plateau.
+        Utilisée dans main.py indirectement via init_infinite().
+        """
+        mouvs = list(basic_mouvements.keys())
+        usedpos = []
+
+        for i in range(4):
+            # Générer une position unique
+            nextpos = self._get_unique_random_position(usedpos)
+
+            # Créer et ajouter le pion
+            y_pos = 0 if color == "blue" else 4
+            pawn = Pawn(nextpos, y_pos, i + 1, mouvs[i], color)
+            self.pawns.append(pawn)
+
+            # Mettre à jour le data_manager
+            self.data_manager.set_initial_pos(color, i + 1, (nextpos, y_pos))
+
+    def _get_unique_random_position(self, used_positions):
+        """
+        Génère une position aléatoire unique.
+        """
+        while True:
+            pos = np.random.randint(0, MAX_GRID_SIZE)
+            if pos not in used_positions:
+                used_positions.append(pos)
+                return pos
+
     def init_pawns_manually(self):
+        """
+        Place les pions manuellement sur le plateau.
+        Non utilisée dans main.py (car manual_mode est False).
+        """
+        mouvs = list(basic_mouvements.keys())
+        positions_blue = []
+        positions_orange = []
 
-        usedmouvs = []
-        mouvs = []
-        allinputsb = []
-        allinputso = []
+        # Placer les pions bleus
+        print("Placement des pions BLEUS")
+        for i in range(4):
+            self._place_single_pawn("blue", i, positions_blue, mouvs)
 
-        for key in basic_mouvements.keys():
-            mouvs.append(key)
-        color = "blue"
-        i = 0
-        y = 0
-        counter = 0
-        # Place eaxh pawn manually
-        while i < 5:
-
-            if counter % 2 == 0:
-                print("Blue is placing ")
-                color = "blue"
-                y = 0
-            else:
-                print("Orange is placing ")
-                color = "orange"
-                y = 4
-
-            try:
-                print("Placing", color, "'s ", i + 1)
-                print("Used mouvs:", usedmouvs)
-                x = int(input("x:") or 1.)
-
-                if color == "blue":
-                    if x not in allinputsb and x < 5:
-                        pawn = Pawn(x, y, i + 1, mouvs[i], color)
-                        self.pawns.append(pawn)
-                        allinputsb.append(x)
-                        if counter % 2 != 0:
-                            i += 1
-                        counter += 1
-                elif color == "orange":
-                    if x not in allinputso and x < 5:
-                        pawn = Pawn(x, y, i + 1, mouvs[i], color)
-                        self.pawns.append(pawn)
-                        allinputso.append(x)
-                        if counter % 2 != 0:
-                            i += 1
-                        counter += 1
-
-                else:
-                    print("Invalid input")
-                    continue
-            except:
-                print("Invalid input")
-                continue
-
-            # Change the color of the player
-            if i == 4 and color == "blue":
-                color = "orange"
-                i = 0
-                y = 4
-                allinputs = []
-            elif i == 4 and color == "orange":
-                break
+        # Placer les pions oranges
+        print("Placement des pions ORANGES")
+        for i in range(4):
+            self._place_single_pawn("orange", i, positions_orange, mouvs)
 
         print("All pawns placed")
-        print("-----Starting game-----")
+        print("----Starting game----")
 
-    # Place the pawns automatically
-    def init_pawns(self, color):
-        mouvs = []
-        for key in basic_mouvements.keys():
-            mouvs.append(key)
+    def _place_single_pawn(self, color, index, positions, mouvs):
+        """
+        Place un seul pion manuellement.
+        """
+        y = 0 if color == "blue" else 4
 
-        usedpos = []
-        usedmouvs = []
-        for i in range(4):
-            nextpos = np.random.randint(0, 5)
-            if nextpos in usedpos:
-                while nextpos in usedpos:
-                    nextpos = np.random.randint(0, 5)
-                usedpos.append(nextpos)
-            else:
-                usedpos.append(nextpos)
+        while True:
+            try:
+                print(f"Placing {color}'s pawn {index + 1}")
+                x = int(input("x (0-4): ") or 1)
 
-            nextmouv = np.random.randint(0, 4)
-            if mouvs[nextmouv] in usedmouvs:
-                while mouvs[nextmouv] in usedmouvs:
-                    nextmouv = np.random.randint(0, 4)
-                usedmouvs.append(mouvs[nextmouv])
-            else:
-                usedmouvs.append(mouvs[nextmouv])
+                if 0 <= x < MAX_GRID_SIZE and x not in positions:
+                    pawn = Pawn(x, y, index + 1, mouvs[index], color)
+                    self.pawns.append(pawn)
+                    positions.append(x)
+                    break
+                else:
+                    print("Invalid position or already used")
+            except ValueError:
+                print("Invalid input. Please enter a number.")
 
-            if color == "blue":
-                pawn = Pawn(nextpos, 0, i + 1, mouvs[i], color)
-                self.data_manager.set_initial_pos(color, i + 1, (nextpos, 0))
-                self.pawns.append(pawn)
-            else:
-                pawn = Pawn(nextpos, 4, i + 1, mouvs[i], color)
-                self.data_manager.set_initial_pos(color, i + 1, (nextpos, 4))
-                self.pawns.append(pawn)
+    # ------------------------------
+    # Gestion des mouvements
+    # ------------------------------
 
-    # Check if a pawn is in the retraite area and add it to the list of pawns that must be played
-    def isretraite(self, lastmove):
-        pawns_must_play["blue"] = []
-        pawns_must_play["orange"] = []
-        if lastmove[1] != "Pawn":
-            if lastmove[0] == "blue":
-                for pawn in self.pawns:
-                    if pawn.color == "orange" and pawn.y == 0 and int(lastmove[3]) == 0 and int(lastmove[2]) == int(
-                            pawn.x) and pawn.type < int(float(lastmove[1])):
-                        pawns_must_play["orange"].append(pawn)
-
-            else:
-                for pawn in self.pawns:
-                    if pawn.color == "blue" and pawn.y == 4 and int(lastmove[3]) == 4 and int(lastmove[2]) == int(
-                            pawn.x) and pawn.type < int(float(lastmove[1])):
-                        pawns_must_play["blue"].append(pawn)
-
-            for key in pawns_must_play.keys():
-                if len(pawns_must_play[key]) > 1:
-                    while len(pawns_must_play[key]) >= 2:
-                        pawns_must_play[key].pop(0)
-            if pawns_must_play["blue"] != [] or pawns_must_play["orange"] != []:
-                return True
-            else:
-                return False
-
-    # Get all the next moves available for a player
     def all_next_moves(self, color):
+        """
+        Retourne tous les mouvements possibles pour une couleur donnée.
+        Utilisée dans main.py pour déterminer les mouvements possibles pour l'IA.
+        """
+        next_moves = []
+
+        # Si le jeu est en phase d'initialisation
+        if self.initializing:
+            return self._get_initialization_moves(color)
+
+        # Sinon, obtenir les mouvements normaux
+        return self._get_normal_moves(color)
+
+    def _get_initialization_moves(self, color):
+        """
+        Obtient les mouvements possibles pendant la phase d'initialisation.
+        """
         next_moves = []
         for pawn in self.pawns:
-            for x in range(5):
-                for y in range(5):
-                    if self.initializing == True and self.grid.grid[y][x] == 0:
-                        if y == 0 and pawn.color == color and pawn.x == -1:
-                            if [pawn.color, pawn.type, x, 0] not in next_moves:
-                                next_moves.append([pawn.color, pawn.type, x, 0])
-                        elif y == 4 and pawn.color == color and pawn.x == -1:
-                            if [pawn.color, pawn.type, x, 4] not in next_moves:
-                                next_moves.append([pawn.color, pawn.type, x, 4])
-                    if Mouvement.legit_mouv(pawn, pawn, x, y, self.grid) and pawn.x != x and pawn.y != y and pawn.color == color and self.initializing == False:
-                        if pawns_must_play[color] == []:
-                            next_moves.append([pawn.color, pawn.type, x, y])
-                        else:
-                            if pawn in pawns_must_play[color]:
-                                next_moves.append([pawn.color, pawn.type, x, y])
+            if pawn.color == color and pawn.x == -1:
+                y_pos = 0 if color == "blue" else 4
+                for x in range(MAX_GRID_SIZE):
+                    if self.grid.grid[y_pos][x] == 0:
+                        next_moves.append([pawn.color, pawn.type, x, y_pos])
         return next_moves
 
-    # Function to simulate a move for the AI
+    def _get_normal_moves(self, color):
+        """
+        Obtient les mouvements possibles pendant la phase normale du jeu.
+        """
+        next_moves = []
+        for pawn in self.pawns:
+            # Vérifier si le pion est de la bonne couleur
+            if pawn.color != color:
+                continue
+
+            # Vérifier si le pion doit jouer (retraite)
+            if pawns_must_play[color] and pawn not in pawns_must_play[color]:
+                continue
+
+            # Trouver tous les mouvements légitimes pour ce pion
+            for x in range(MAX_GRID_SIZE):
+                for y in range(MAX_GRID_SIZE):
+                    if (pawn.x != x or pawn.y != y) and Mouvement.legit_mouv(pawn, pawn, x, y, self.grid):
+                        next_moves.append([pawn.color, pawn.type, x, y])
+
+        return next_moves
+
+    def isretraite(self, lastmove):
+        """
+        Vérifie si un pion est dans la zone de retraite et met à jour la liste des pions qui doivent jouer.
+        Utilisée dans main.py pour déterminer les pions qui doivent jouer.
+        """
+        # Réinitialiser les listes de pions qui doivent jouer
+        pawns_must_play["blue"] = []
+        pawns_must_play["orange"] = []
+
+        # Si le dernier mouvement n'est pas un pion, ignorer
+        if lastmove[1] == "Pawn":
+            return False
+
+        # Déterminer les pions qui doivent jouer en fonction du dernier mouvement
+        if lastmove[0] == "blue":
+            self._check_retraite_for_color("orange", 0, lastmove)
+        else:
+            self._check_retraite_for_color("blue", 4, lastmove)
+
+        # Limiter à un seul pion par couleur
+        for color in ["blue", "orange"]:
+            if len(pawns_must_play[color]) > 1:
+                pawns_must_play[color] = [pawns_must_play[color][-1]]
+
+        # Retourner True si au moins un pion doit jouer
+        return bool(pawns_must_play["blue"] or pawns_must_play["orange"])
+
+    def _check_retraite_for_color(self, color, y_pos, lastmove):
+        """
+        Vérifie les pions d'une couleur donnée pour la retraite.
+        """
+        for pawn in self.pawns:
+            if (pawn.color == color and
+                pawn.y == y_pos and
+                int(lastmove[3]) == y_pos and
+                int(lastmove[2]) == pawn.x and
+                pawn.type < int(float(lastmove[1]))):
+                pawns_must_play[color].append(pawn)
+
     def simulate_move(self, color, type, x, y):
+        """
+        Simule un mouvement pour l'IA.
+        Non utilisée dans main.py, mais utile pour l'IA Minimax.
+        """
         for pawn in self.pawns:
             if pawn.color == color and pawn.type == type:
-                ispawnmoved = pawn.move(x, y, self.grid, self.pawns, self, simulate=True)
+                return pawn.move(x, y, self.grid, self.pawns, self, simulate=True)
+        return [False, False]
 
-        return ispawnmoved
+    # ------------------------------
+    # Évaluation (pour l'IA)
+    # ------------------------------
 
-    # Return the color of the pawn at the bottom of the stack
     def get_color_bottom(self, x, y, stack_value):
+        """
+        Retourne la couleur du pion à la base d'une pile.
+        Non utilisée dans main.py, mais utile pour les fonctions d'évaluation.
+        """
         for pawn in self.pawns:
             if pawn.x == x and pawn.y == y and pawn.type == stack_value:
                 return pawn.color
         return None
 
     def evaluateClassic(self, color):
+        """
+        Évalue le plateau selon la stratégie classique.
+        Non utilisée dans main.py, mais utile pour l'IA Minimax.
+        """
         score = 0
-        stack_multiplier = 2000  # Multiplicateur de score pour les piles
-        bonus_color = 500  # Bonus pour chaque pion de la couleur du joueur dans une pile
-        threat_multiplier = 500  # Malus pour les piles avantageuses de l'adversaire
-        opponent_color = "blue" if color == "orange" else "orange"
 
         # Parcourir toutes les piles du plateau
         for x in range(self.grid.size):
             for y in range(self.grid.size):
                 stack = self.grid.grid[y][x]
-                stack_size = len(stack)
-                if stack_size > 2:
+                if len(stack) > 2:
+                    # Obtenir les couleurs des pions dans la pile
                     base_pawn_color = self.get_color_bottom(x, y, stack[0])
                     secondPawn_color = self.get_color_bottom(x, y, stack[1])
                     thirdPawn_color = self.get_color_bottom(x, y, stack[2])
-                    # Attribuer des points pour les configurations avantageuses
-                    score += self.calculate_stack_scoreClassic(stack, base_pawn_color, secondPawn_color, thirdPawn_color, color, stack_multiplier, bonus_color, threat_multiplier)
+
+                    # Calculer le score de la pile
+                    score += self._calculate_stack_score(
+                        stack, base_pawn_color, secondPawn_color, thirdPawn_color,
+                        color, STACK_MULTIPLIER, BONUS_COLOR, THREAT_MULTIPLIER
+                    )
 
         return score
 
-    def calculate_stack_scoreClassic(self, stack, base_pawn_color, secondPawn_color, thirdPawn_color, color, stack_multiplier, bonus_color, threat_multiplier):
+    def _calculate_stack_score(self, stack, base_color, second_color, third_color, player_color,
+                              stack_multiplier, bonus_color, threat_multiplier):
+        """
+        Calcule le score d'une pile en fonction de sa composition.
+        """
+        stack_values = list(stack)
         stack_score = 0
-        bonus_color = 150
-        winning_stack_bonus = 100000000  # Bonus pour une pile gagnante de 4-3-2-1
-        
-        stack_values = [pawn for pawn in stack]
 
-        # Calcul du score en fonction de la séquence de chiffres dans la pile 
+        # Vérifier les configurations gagnantes et importantes
         if stack_values == [4, 3, 2, 1]:
-            if base_pawn_color == color:
-                stack_score += winning_stack_bonus
+            return WINNING_STACK_BONUS if base_color == player_color else -WINNING_STACK_BONUS
+
+        # Autres configurations importantes
+        score_configs = {
+            (4, 3, 2): (10, 10),
+            (4, 3, 1): (5, 6),
+            (4, 3): (2, 3),
+            (4, 2, 1): (1, 5),
+            (4, 2): (2, 3),
+            (4, 1): (-1, 1),
+            (3, 2, 1): (5, 5),
+            (3, 2): (2, 2),
+            (3, 1): (1, 6),
+            (2, 1): (1, 1)
+        }
+
+        # Calculer le score en fonction de la configuration
+        tuple_stack = tuple(stack_values)
+        if tuple_stack in score_configs:
+            pos_mult, neg_mult = score_configs[tuple_stack]
+
+            if base_color == player_color:
+                stack_score += (stack_multiplier * pos_mult + bonus_color)
             else:
-                stack_score -= winning_stack_bonus
-        if stack_values == [4, 3, 2]:
-            if base_pawn_color == color:
-                stack_score += (stack_multiplier * 10 + bonus_color)
-            else:
-                stack_score -= (stack_multiplier * 10 + threat_multiplier)
-        if stack_values == [4, 3, 1]:
-            if base_pawn_color == color:
-                stack_score += (stack_multiplier * 5 + bonus_color)
-            else:
-                if secondPawn_color != color and thirdPawn_color == color:
-                    stack_score += (stack_multiplier * 5 + bonus_color)
+                # Cas spéciaux pour certaines configurations
+                if tuple_stack == (4, 3, 1) and second_color != player_color and third_color == player_color:
+                    stack_score += (stack_multiplier * pos_mult + bonus_color)
+                elif tuple_stack in [(4, 2, 1), (4, 2), (4, 1), (3, 1)] and second_color == player_color:
+                    stack_score += (stack_multiplier * pos_mult + bonus_color)
                 else:
-                    stack_score -= (stack_multiplier * 6 + threat_multiplier)
-        if stack_values == [4, 3]:
-            if base_pawn_color == color:
-                stack_score += (stack_multiplier * 2 + bonus_color)
-            else:
-                stack_score -= (stack_multiplier * 3 + threat_multiplier)
-        if stack_values == [4, 2, 1]:
-            if base_pawn_color == color:
-                stack_score += (stack_multiplier + bonus_color)
-            else:
-                if secondPawn_color == color:
-                    stack_score += (stack_multiplier * 5 + bonus_color)
-                else:
-                    stack_score -= (stack_multiplier * 5 + threat_multiplier)
-        if stack_values == [4, 2]:
-            if base_pawn_color == color:
-                stack_score += (stack_multiplier * 2 + bonus_color)
-            else:
-                if secondPawn_color == color:
-                    stack_score += (stack_multiplier * 5 + bonus_color)
-                else:
-                    stack_score -= (stack_multiplier * 3 + threat_multiplier)
-        if stack_values == [4, 1]:
-            if base_pawn_color == color:
-                stack_score -= (stack_multiplier + bonus_color)
-            else:
-                if secondPawn_color == color:
-                    stack_score += (stack_multiplier * 5 + bonus_color)
-                else:
-                    stack_score -= (stack_multiplier + threat_multiplier)
-        if stack_values == [3, 2, 1]:
-            if base_pawn_color == color:
-                stack_score += (stack_multiplier * 5 + bonus_color)
-            else:
-                stack_score -= (stack_multiplier * 5 + threat_multiplier)
-        if stack_values == [3, 2]:
-            if base_pawn_color == color:
-                stack_score += (stack_multiplier * 2 + bonus_color)
-            else:
-                stack_score -= (stack_multiplier * 2 + threat_multiplier)
-        if stack_values == [3, 1]:
-            if base_pawn_color == color:
-                stack_score += (stack_multiplier + bonus_color)
-            else:
-                if secondPawn_color == color:
-                    stack_score += (stack_multiplier * 5 + bonus_color)
-                else:
-                    stack_score -= (stack_multiplier * 6 + threat_multiplier)
-        if stack_values == [2, 1]:
-            if base_pawn_color == color:
-                stack_score += (stack_multiplier + bonus_color)
-            else:
-                stack_score -= (stack_multiplier + threat_multiplier)
+                    stack_score -= (stack_multiplier * neg_mult + threat_multiplier)
 
         return stack_score
-    
-    def evaluateCenter(self, color):
-        score = 0
-        stack_multiplier = 100
-        bonus_color = 50
-        threat_multiplier = 500
-        central_positions = [(2, 2), (2, 1), (2, 3), (1, 2), (3, 2)]  # Positions centrales pour la pièce 3
-        diagonal_positions = [(1, 1), (1, 3), (3, 1), (3, 3)]  # Positions diagonales pour la pièce 2
-        central_position = (2, 2)  # Position centrale pour la pièce 1
 
-        # Poids attribués aux différentes cases en fonction de leur importance stratégique
-        weight_central = 1.5  # La case centrale a un poids 1.5 fois plus important
-        weight_adjacent = 1.2  # Les cases adjacentes ont un poids 1.2 fois plus important
-        weight_diagonal = 1.1  # Les cases diagonales ont un poids 1.1 fois plus important
+    def evaluateCenter(self, color):
+        """
+        Évalue le plateau en donnant plus d'importance aux positions centrales.
+        Non utilisée dans main.py, mais utile pour l'IA Minimax.
+        """
+        score = 0
+        central_positions = [(2, 2), (2, 1), (2, 3), (1, 2), (3, 2)]
+        diagonal_positions = [(1, 1), (1, 3), (3, 1), (3, 3)]
+        central_position = (2, 2)
+
+        # Poids pour les différentes positions
+        weights = {
+            central_position: 1.5,
+            "adjacent": 1.2,
+            "diagonal": 1.1
+        }
 
         # Parcourir toutes les piles du plateau
         for x in range(self.grid.size):
             for y in range(self.grid.size):
                 stack = self.grid.grid[y][x]
-                stack_size = len(stack)
-                if stack_size > 2:
+                if len(stack) > 2:
+                    # Obtenir les couleurs des pions dans la pile
                     base_pawn_color = self.get_color_bottom(x, y, stack[0])
                     secondPawn_color = self.get_color_bottom(x, y, stack[1])
                     thirdPawn_color = self.get_color_bottom(x, y, stack[2])
-                    
-                    # Calcul du score de la pile
-                    stack_score = self.calculate_stack_scoreCenter(stack, base_pawn_color, secondPawn_color, thirdPawn_color, color, stack_multiplier, bonus_color, threat_multiplier)
-                    
-                    # Appliquer les poids aux positions centrales et diagonales
-                    if (x, y) == central_position:
-                        stack_score *= weight_central
-                    elif (x, y) in central_positions:
-                        stack_score *= weight_adjacent
-                    elif (x, y) in diagonal_positions:
-                        stack_score *= weight_diagonal
 
-                    # Ajouter le score ajusté au score total
+                    # Calculer le score de base de la pile
+                    stack_score = self._calculate_stack_score(
+                        stack, base_pawn_color, secondPawn_color, thirdPawn_color,
+                        color, 100, 50, 500
+                    )
+
+                    # Appliquer les poids en fonction de la position
+                    if (x, y) == central_position:
+                        stack_score *= weights[central_position]
+                    elif (x, y) in central_positions:
+                        stack_score *= weights["adjacent"]
+                    elif (x, y) in diagonal_positions:
+                        stack_score *= weights["diagonal"]
+
                     score += stack_score
 
         return score
 
-
-    def calculate_stack_scoreCenter(stack, base_pawn_color, secondPawn_color, thirdPawn_color, color, stack_multiplier, bonus_color, threat_multiplier):
-        stack_score = 0
-        bonus_color = 150
-        winning_stack_bonus = 100000000  # Bonus pour une pile gagnante de 4-3-2-1
-        
-        stack_values = [pawn for pawn in stack]
-
-        # Calcul du score en fonction de la séquence de chiffres dans la pile 
-        if stack_values == [4, 3, 2, 1]:
-            if base_pawn_color == color:
-                stack_score += winning_stack_bonus
-            else:
-                stack_score -= winning_stack_bonus
-        if stack_values == [4, 3, 2]:
-            if base_pawn_color == color:
-                stack_score += (stack_multiplier * 10 + bonus_color)
-            else:
-                stack_score -= (stack_multiplier * 10 + threat_multiplier)
-        if stack_values == [4, 3, 1]:
-            if base_pawn_color == color:
-                stack_score += (stack_multiplier * 5 + bonus_color)
-            else:
-                if secondPawn_color != color and thirdPawn_color == color:
-                    stack_score += (stack_multiplier * 5 + bonus_color)
-                else:
-                    stack_score -= (stack_multiplier * 6 + threat_multiplier)
-        if stack_values == [4, 3]:
-            if base_pawn_color == color:
-                stack_score += (stack_multiplier * 2 + bonus_color)
-            else:
-                stack_score -= (stack_multiplier * 3 + threat_multiplier)
-        if stack_values == [4, 2, 1]:
-            if base_pawn_color == color:
-                stack_score += (stack_multiplier + bonus_color)
-            else:
-                if secondPawn_color == color:
-                    stack_score += (stack_multiplier * 5 + bonus_color)
-                else:
-                    stack_score -= (stack_multiplier * 5 + threat_multiplier)
-        if stack_values == [4, 2]:
-            if base_pawn_color == color:
-                stack_score += (stack_multiplier * 2 + bonus_color)
-            else:
-                if secondPawn_color == color:
-                    stack_score += (stack_multiplier * 5 + bonus_color)
-                else:
-                    stack_score -= (stack_multiplier * 3 + threat_multiplier)
-        if stack_values == [4, 1]:
-            if base_pawn_color == color:
-                stack_score -= (stack_multiplier + bonus_color)
-            else:
-                if secondPawn_color == color:
-                    stack_score += (stack_multiplier * 5 + bonus_color)
-                else:
-                    stack_score -= (stack_multiplier + threat_multiplier)
-        if stack_values == [3, 2, 1]:
-            if base_pawn_color == color:
-                stack_score += (stack_multiplier * 5 + bonus_color)
-            else:
-                stack_score -= (stack_multiplier * 5 + threat_multiplier)
-        if stack_values == [3, 2]:
-            if base_pawn_color == color:
-                stack_score += (stack_multiplier * 2 + bonus_color)
-            else:
-                stack_score -= (stack_multiplier * 2 + threat_multiplier)
-        if stack_values == [3, 1]:
-            if base_pawn_color == color:
-                stack_score += (stack_multiplier + bonus_color)
-            else:
-                if secondPawn_color == color:
-                    stack_score += (stack_multiplier * 5 + bonus_color)
-                else:
-                    stack_score -= (stack_multiplier * 6 + threat_multiplier)
-        if stack_values == [2, 1]:
-            if base_pawn_color == color:
-                stack_score += (stack_multiplier + bonus_color)
-            else:
-                stack_score -= (stack_multiplier + threat_multiplier)
-
-        return stack_score
-    
     def evaluateRush(self, color):
+        """
+        Évalue le plateau en favorisant la construction rapide de piles.
+        Non utilisée dans main.py, mais utile pour l'IA Minimax.
+        """
         score = 0
-        stack_multiplier = 2000  # Score multiplier for stacks
-        winning_stack_bonus = 100000000  # Bonus for a winning stack of 4-3-2-1
 
-
-        # Traverse all cells of the grid
-        for x in range(self.grid.size):
-            for y in range(self.grid.size):
-                stack = self.grid.grid[y][x]  # Get the stack at this cell
-                stack_values = [pawn for pawn in stack]
-                base_pawn_color = self.get_color_bottom(x, y, stack[0])
-                if base_pawn_color == color:
-                    if len(stack) == 1 and stack_values == 4:
-                        score += stack_multiplier * 1  # Priority to start the stack with a 4
-                    elif len(stack) == 2 and stack_values == [4, 3]:
-                        score += stack_multiplier * 2  # Higher priority to add a 3 on top of a 4
-                    elif len(stack) == 3 and stack_values == [4, 3, 2]:
-                        score += stack_multiplier * 3  # Even higher priority to add a 2 on top of a 4-3
-                    elif len(stack) == 4 and stack_values == [4, 3, 2, 1]:
-                        score += winning_stack_bonus  # Maximum priority and bonus for completing the stack 4-3-2-1
-
-        return score
-    
-    def evaluateBlock(self, color):
-        score = 0
-        blockally = 5000  
-        blockenemy = 15000  
-        blockenemy2 = 10000
-        opponent_color = "blue" if color == "orange" else "orange"
-
+        # Parcourir toutes les piles du plateau
         for x in range(self.grid.size):
             for y in range(self.grid.size):
                 stack = self.grid.grid[y][x]
-                if len(stack) > 0:
-                    base_pawn_color = self.get_color_bottom(x, y, stack[0])
-                    if len(stack) > 1:
-                        top_pawn = stack[1]
+                if not stack:
+                    continue
 
-                        if stack[0] == 4:
-                            if top_pawn == 2 and base_pawn_color == color:
-                                score += blockally
-                            elif top_pawn == 1 and base_pawn_color == opponent_color:
-                                score += blockenemy
-                        if stack[0] == 4 and stack[1] == 3:
-                            top_pawn = stack[-1]
+                stack_values = list(stack)
+                base_pawn_color = self.get_color_bottom(x, y, stack[0])
 
-                            if top_pawn == 1 and base_pawn_color == opponent_color:
-                                score += blockenemy2
+                # Vérifier si la pile appartient au joueur
+                if base_pawn_color == color:
+                    # Attribuer des scores en fonction de la progression vers la pile gagnante
+                    if len(stack) == 1 and stack_values[0] == 4:
+                        score += STACK_MULTIPLIER * 1
+                    elif len(stack) == 2 and stack_values == [4, 3]:
+                        score += STACK_MULTIPLIER * 2
+                    elif len(stack) == 3 and stack_values == [4, 3, 2]:
+                        score += STACK_MULTIPLIER * 3
+                    elif len(stack) == 4 and stack_values == [4, 3, 2, 1]:
+                        score += WINNING_STACK_BONUS
 
         return score
-   
-    
 
-                    
+    def evaluateBlock(self, color):
+        """
+        Évalue le plateau en favorisant le blocage des pions adverses.
+        Non utilisée dans main.py, mais utile pour l'IA Minimax.
+        """
+        score = 0
+        blockally = 5000
+        blockenemy = 15000
+        blockenemy2 = 10000
+        opponent_color = "blue" if color == "orange" else "orange"
+
+        # Parcourir toutes les piles du plateau
+        for x in range(self.grid.size):
+            for y in range(self.grid.size):
+                stack = self.grid.grid[y][x]
+                if len(stack) <= 1:
+                    continue
+
+                base_pawn_color = self.get_color_bottom(x, y, stack[0])
+
+                # Vérifier les configurations de blocage
+                if stack[0] == 4:
+                    if len(stack) > 1:
+                        if stack[1] == 2 and base_pawn_color == color:
+                            score += blockally
+                        elif stack[1] == 1 and base_pawn_color == opponent_color:
+                            score += blockenemy
+
+                    if len(stack) > 2 and stack[1] == 3:
+                        if stack[2] == 1 and base_pawn_color == opponent_color:
+                            score += blockenemy2
+
+        return score
+
+
+# Fonction utilitaire pour obtenir l'entrée utilisateur
+def get_user_input(message, valid_inputs):
+    """
+    Demande à l'utilisateur une entrée valide.
+    Utilisée dans main.py indirectement via __init__.
+    """
+    user_input = None
+    while user_input not in valid_inputs:
+        user_input = input(message)
+        if user_input not in valid_inputs:
+            print("Invalid input")
+    return user_input
