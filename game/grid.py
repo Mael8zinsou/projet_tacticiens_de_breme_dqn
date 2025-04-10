@@ -46,7 +46,7 @@ class Grid:
         pass
 
         # Code d'affichage commenté
-        '''
+        
         print("----")
         row = ""
         for i in range(self.size):
@@ -65,7 +65,7 @@ class Grid:
             print(row + Back.BLACK + "|")
             row = ""
         print("----")
-        '''
+        
 
     def checkgrid(self, round):
         """

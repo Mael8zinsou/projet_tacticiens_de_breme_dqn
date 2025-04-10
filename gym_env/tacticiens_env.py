@@ -49,6 +49,12 @@ class TacticiensEnv(Env):
         self.turn_counter = 0
         self.last_move_result = [False, False]  # [success, win]
 
+        # Attributs pour le suivi des mouvements et récompenses améliorées
+        self.last_move_coords = (-1, -1)
+        self.last_move_piece_type = None
+        self.last_move_color = None
+        self.previous_opponent_pawns_count = 0
+
         # Espaces d'observation et d'action
         self.observation_space = Box(low=0, high=1, shape=(5, 5, 8), dtype=np.int8)
         self.action_space = Discrete(100)  # Nombre maximal estimé de mouvements possibles
@@ -61,6 +67,9 @@ class TacticiensEnv(Env):
 
         # Initialisation du fichier de log
         self._init_move_log()
+
+        # Compter les pions adverses au début
+        self.previous_opponent_pawns_count = sum(1 for pawn in self.game.pawns if pawn.color == self.opponent_color)
 
     def _init_opponent(self):
         """Initialise l'IA adversaire selon le type spécifié"""
@@ -99,6 +108,9 @@ class TacticiensEnv(Env):
         # Réinitialiser l'état
         self.turn_counter = 0
         self.last_move_result = [False, False]
+        self.last_move_coords = (-1, -1)
+        self.last_move_piece_type = None
+        self.last_move_color = None
 
         # Réinitialiser le fichier de log
         self._init_move_log()
@@ -108,6 +120,9 @@ class TacticiensEnv(Env):
 
         # Obtenir les mouvements valides
         self.valid_moves = self.game.all_next_moves(self.player_color)
+
+        # Compter les pions adverses au début
+        self.previous_opponent_pawns_count = sum(1 for pawn in self.game.pawns if pawn.color == self.opponent_color)
 
         return self._encode_state(), {}
 
@@ -128,6 +143,9 @@ class TacticiensEnv(Env):
         # Vérifier si l'action est valide
         if action >= len(self.valid_moves) or not self.valid_moves:
             return self._encode_state(), -5, True, False, {'valid_moves': 0}
+
+        # Mettre à jour le compteur de pions adverses avant le mouvement
+        self.previous_opponent_pawns_count = sum(1 for pawn in self.game.pawns if pawn.color == self.opponent_color)
 
         # Exécuter le mouvement du joueur
         player_success, player_win = self._execute_player_move(action)
@@ -179,6 +197,11 @@ class TacticiensEnv(Env):
         move = self.valid_moves[action]
         color, piece_type, x, y = move
 
+        # Stocker les coordonnées du mouvement avant de l'exécuter
+        self.last_move_coords = (x, y)
+        self.last_move_piece_type = piece_type
+        self.last_move_color = color
+
         # Trouver le pion à déplacer
         for pawn in self.game.pawns:
             if pawn.type == piece_type and pawn.color == color:
@@ -200,9 +223,9 @@ class TacticiensEnv(Env):
             self.data_manager.update_pawn_history(color, piece_type, (x, y), self.turn_counter)
             self.turn_counter += 1
 
-            # Si le joueur a gagné, enregistrer les données de la partie
-            if win:
-                self._record_game_result(color, x, y)
+        # Si le joueur a gagné, enregistrer les données de la partie
+        if win:
+            self._record_game_result(color, x, y)
 
         return success, win
 
@@ -239,9 +262,9 @@ class TacticiensEnv(Env):
             self.data_manager.update_pawn_history(opponent_color, opponent_piece_type, (opponent_x, opponent_y), self.turn_counter)
             self.turn_counter += 1
 
-            # Si l'adversaire a gagné, enregistrer les données de la partie
-            if opponent_win:
-                self._record_game_result(opponent_color, opponent_x, opponent_y)
+        # Si l'adversaire a gagné, enregistrer les données de la partie
+        if opponent_win:
+            self._record_game_result(opponent_color, opponent_x, opponent_y)
 
         return opponent_success, opponent_win
 
@@ -305,7 +328,7 @@ class TacticiensEnv(Env):
 
     def _calculate_reward(self, success, win):
         """
-        Calcule la récompense en fonction du résultat du mouvement.
+        Calcule une récompense détaillée basée sur plusieurs facteurs stratégiques.
 
         Args:
             success (bool): Indique si le mouvement a réussi
@@ -317,10 +340,40 @@ class TacticiensEnv(Env):
         if win:
             return 10  # Victoire
         elif success:
-            # Récompense basée sur l'évaluation du plateau
+            # Récompense de base basée sur l'évaluation du plateau
             eval_score = self.game.evaluateClassic(self.player_color)
-            # Normaliser le score pour éviter des valeurs trop grandes
-            return min(max(eval_score / 1000, -5), 5)  # Limiter entre -5 et 5
+            base_reward = min(max(eval_score / 800, -5), 5)
+
+            # Extraire les informations du dernier mouvement
+            x, y = self.last_move_coords
+            piece_type = self.last_move_piece_type
+
+            # 1. Bonus pour les mouvements vers le centre
+            center_bonus = 0.2 if (1 <= x <= 3 and 1 <= y <= 3) else 0
+
+            # 2. Bonus pour les mouvements vers les objectifs (coins pour type 1)
+            objective_bonus = 0
+            if piece_type == 1:  # Si c'est un pion de type 1
+                corners = [(0,0), (0,4), (4,0), (4,4)]
+                if (x, y) in corners:
+                    objective_bonus = 0.5
+                else:
+                    # Récompense la progression vers les coins
+                    min_distance = min(abs(x-cx) + abs(y-cy) for cx, cy in corners)
+                    objective_bonus = 0.1 * (5 - min_distance)
+
+            # 3. Bonus pour les captures
+            current_opponent_pawns_count = sum(1 for pawn in self.game.pawns if pawn.color == self.opponent_color)
+            capture_bonus = 0.3 * (self.previous_opponent_pawns_count - current_opponent_pawns_count)
+
+            # 4. Bonus pour la formation de piles
+            stack_size = len(self.game.grid.grid[y][x])
+            stack_bonus = 0.1 * (stack_size - 1)
+
+            # Calculer la récompense totale
+            total_reward = base_reward + center_bonus + objective_bonus + capture_bonus + stack_bonus
+
+            return total_reward
         else:
             return -5  # Mouvement invalide
 

@@ -94,6 +94,8 @@ class DQNAgent:
         """
         if not valid_moves:
             return 0
+        
+        print(f"Valid moves: {valid_moves}")
 
         # Exploration: choisir une action aléatoire
         if np.random.rand() <= self.epsilon:

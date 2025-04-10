@@ -3,7 +3,7 @@ import os
 import random
 from stable_baselines3 import DQN
 
-class DQNAgent:
+class DQN_sb3_Agent:
     """
     Agent DQN pour le jeu Les Tacticiens de Brême.
     Cette implémentation utilise un modèle pré-entraîné avec Stable Baselines 3.

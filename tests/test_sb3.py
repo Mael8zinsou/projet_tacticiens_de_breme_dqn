@@ -17,7 +17,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from gym_env.tacticiens_env import TacticiensEnv
 
-def test_agent(model_path, num_episodes=10, render=True):
+def test_agent(model_path, num_episodes=5, render=True):
     """
     Teste un agent DQN entraîné avec Stable Baselines 3.
 
@@ -152,7 +152,8 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         model_path = sys.argv[1]
     else:
-        model_path = "./models/sb3_dqn/dqn_final_model.zip"  # Chemin par défaut pour le modèle SB3
+        # model_path = "./models/sb3_dqn/dqn_final_model.zip"  # Chemin par défaut pour le modèle SB3
+        model_path = "./best_models/best_model_5000_-5.00.zip"
 
     # Vérifier si le modèle existe
     if not os.path.exists(model_path):

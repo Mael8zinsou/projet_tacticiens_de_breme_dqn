@@ -163,7 +163,7 @@ class TrainingInfoCallback(BaseCallback):
         plt.savefig("./learning_curves_sb3.png")
         logging.info("Courbes d'apprentissage sauvegardées dans ./learning_curves_sb3.png")
 
-def train_sb3_dqn(timesteps=10000, save_path="./models/sb3_dqn", config=None):
+def train_sb3_dqn(timesteps=100000, save_path="./models/sb3_dqn", config=None):
     """
     Entraîne un agent DQN avec Stable Baselines 3
 
@@ -262,21 +262,35 @@ def train_sb3_dqn(timesteps=10000, save_path="./models/sb3_dqn", config=None):
 
 if __name__ == "__main__":
     # Définir les paramètres d'entraînement
-    timesteps = 10000
+    timesteps = 100000
     save_path = "./models/sb3_dqn"
 
-    # Configuration personnalisée
+    # # Configuration personnalisée
+    # config = {
+    #     'learning_rate': 5e-4,
+    #     'buffer_size': 50000,
+    #     'learning_starts': 1000,
+    #     'batch_size': 64,
+    #     'gamma': 0.99,
+    #     'target_update_interval': 1000,
+    #     'train_freq': 4,
+    #     'gradient_steps': 1,
+    #     'exploration_fraction': 0.2,
+    #     'exploration_final_eps': 0.05
+    # }
+
+    # Configuration optimisée
     config = {
-        'learning_rate': 5e-4,
-        'buffer_size': 50000,
-        'learning_starts': 1000,
-        'batch_size': 64,
-        'gamma': 0.99,
-        'target_update_interval': 1000,
-        'train_freq': 4,
-        'gradient_steps': 1,
-        'exploration_fraction': 0.2,
-        'exploration_final_eps': 0.05
+        'learning_rate': 3e-4,         # Légèrement réduit (était 5e-4)
+        'buffer_size': 100000,         # Doublé (était 50000)
+        'learning_starts': 5000,       # Augmenté (était 1000)
+        'batch_size': 128,             # Augmenté (était 64)
+        'gamma': 0.99,                 # Inchangé, valeur optimale
+        'target_update_interval': 2000, # Augmenté (était 1000)
+        'train_freq': 4,               # Inchangé
+        'gradient_steps': 2,           # Augmenté (était 1)
+        'exploration_fraction': 0.3,   # Augmenté (était 0.2)
+        'exploration_final_eps': 0.02   # Réduit (était 0.05)
     }
 
     # Entraîner l'agent

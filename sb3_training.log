@@ -1,0 +1,547 @@
+2025-04-09 10:33:53,229 - INFO - Démarrage de l'entraînement SB3 DQN pour 10000 étapes
+2025-04-09 10:33:53,353 - INFO - Vérification de l'environnement réussie
+2025-04-09 10:33:57,437 - INFO - Début de l'entraînement pour 10000 étapes
+2025-04-09 10:33:57,447 - INFO - Début de l'entraînement
+2025-04-09 10:34:06,629 - INFO - Step: 1000 (9.18s)
+2025-04-09 10:34:06,629 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 10:34:06,629 - INFO -   Longueur moyenne (100 derniers): 1.25
+2025-04-09 10:34:06,630 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 10:34:20,771 - INFO - Step: 2000 (23.32s)
+2025-04-09 10:34:20,772 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 10:34:20,774 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 10:34:20,775 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 10:34:38,450 - INFO - Step: 3000 (41.00s)
+2025-04-09 10:34:38,456 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 10:34:38,457 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 10:34:38,459 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 10:35:03,814 - INFO - Step: 4000 (66.37s)
+2025-04-09 10:35:03,815 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 10:35:03,816 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 10:35:03,816 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 10:35:12,864 - INFO - Step: 5000 (75.42s)
+2025-04-09 10:35:12,865 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 10:35:12,865 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 10:35:12,866 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 10:35:12,946 - INFO -   Évaluation: score=-5.00 ± 0.00
+2025-04-09 10:35:12,962 - INFO -   Nouveau meilleur modèle sauvegardé: ./best_models/best_model_5000_-5.00.zip
+2025-04-09 10:35:24,391 - INFO - Step: 6000 (86.94s)
+2025-04-09 10:35:24,392 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 10:35:24,392 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 10:35:24,393 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 10:35:35,375 - INFO - Step: 7000 (97.93s)
+2025-04-09 10:35:35,376 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 10:35:35,376 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 10:35:35,377 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 10:35:44,192 - INFO - Step: 8000 (106.75s)
+2025-04-09 10:35:44,193 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 10:35:44,193 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 10:35:44,193 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 10:35:52,427 - INFO - Step: 9000 (114.98s)
+2025-04-09 10:35:52,428 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 10:35:52,428 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 10:35:52,428 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 10:36:00,670 - INFO - Step: 10000 (123.22s)
+2025-04-09 10:36:00,671 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 10:36:00,671 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 10:36:00,672 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 10:36:00,750 - INFO -   Évaluation: score=-5.00 ± 0.00
+2025-04-09 10:36:00,758 - INFO - Fin de l'entraînement: 123.31s, 9342 épisodes
+2025-04-09 10:36:00,758 - INFO - Score moyen: -5.00
+2025-04-09 10:36:00,758 - INFO - Taux de victoire: 0.00%
+2025-04-09 10:36:00,759 - INFO - Meilleur modèle: ./best_models/best_model_5000_-5.00.zip (score: -5.00)
+2025-04-09 10:36:02,115 - INFO - Courbes d'apprentissage sauvegardées dans ./learning_curves_sb3.png
+2025-04-09 10:36:02,116 - INFO - Entraînement terminé en 124.68 secondes
+2025-04-09 10:36:02,125 - INFO - Modèle final sauvegardé dans ./models/sb3_dqn\dqn_final_model
+2025-04-09 10:36:02,126 - INFO - Entraînement SB3 DQN terminé
+2025-04-09 10:45:03,356 - INFO - Démarrage de l'entraînement SB3 DQN pour 10000 étapes
+2025-04-09 10:45:03,469 - INFO - Vérification de l'environnement réussie
+2025-04-09 10:45:07,493 - INFO - Début de l'entraînement pour 10000 étapes
+2025-04-09 10:45:07,503 - INFO - Début de l'entraînement
+2025-04-09 10:45:14,288 - INFO - Step: 1000 (6.79s)
+2025-04-09 10:45:14,289 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 10:45:14,289 - INFO -   Longueur moyenne (100 derniers): 1.34
+2025-04-09 10:45:14,289 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 10:45:23,388 - INFO - Step: 2000 (15.89s)
+2025-04-09 10:45:23,388 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 10:45:23,389 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 10:45:23,389 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 10:45:32,527 - INFO - Step: 3000 (25.02s)
+2025-04-09 10:45:32,528 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 10:45:32,528 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 10:45:32,529 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 10:45:42,170 - INFO - Step: 4000 (34.67s)
+2025-04-09 10:45:42,170 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 10:45:42,171 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 10:45:42,171 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 10:45:51,312 - INFO - Step: 5000 (43.81s)
+2025-04-09 10:45:51,312 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 10:45:51,313 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 10:45:51,314 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 10:45:51,396 - INFO -   Évaluation: score=-5.00 ± 0.00
+2025-04-09 10:45:51,417 - INFO -   Nouveau meilleur modèle sauvegardé: ./best_models/best_model_5000_-5.00.zip
+2025-04-09 10:46:00,297 - INFO - Step: 6000 (52.79s)
+2025-04-09 10:46:00,297 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 10:46:00,298 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 10:46:00,298 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 10:46:09,348 - INFO - Step: 7000 (61.84s)
+2025-04-09 10:46:09,349 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 10:46:09,349 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 10:46:09,350 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 10:46:19,031 - INFO - Step: 8000 (71.53s)
+2025-04-09 10:46:19,031 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 10:46:19,031 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 10:46:19,032 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 10:46:29,114 - INFO - Step: 9000 (81.61s)
+2025-04-09 10:46:29,115 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 10:46:29,115 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 10:46:29,115 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 10:46:39,697 - INFO - Step: 10000 (92.19s)
+2025-04-09 10:46:39,698 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 10:46:39,698 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 10:46:39,703 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 10:46:39,796 - INFO -   Évaluation: score=-5.00 ± 0.00
+2025-04-09 10:46:39,805 - INFO - Fin de l'entraînement: 92.30s, 9599 épisodes
+2025-04-09 10:46:39,806 - INFO - Score moyen: -5.00
+2025-04-09 10:46:39,806 - INFO - Taux de victoire: 0.00%
+2025-04-09 10:46:39,807 - INFO - Meilleur modèle: ./best_models/best_model_5000_-5.00.zip (score: -5.00)
+2025-04-09 10:46:40,771 - INFO - Courbes d'apprentissage sauvegardées dans ./learning_curves_sb3.png
+2025-04-09 10:46:40,772 - INFO - Entraînement terminé en 93.28 secondes
+2025-04-09 10:46:40,781 - INFO - Modèle final sauvegardé dans ./models/sb3_dqn\dqn_final_model
+2025-04-09 10:46:40,784 - INFO - Entraînement SB3 DQN terminé
+2025-04-09 11:03:34,099 - INFO - Démarrage de l'entraînement SB3 DQN pour 10000 étapes
+2025-04-09 11:03:34,153 - WARNING - Vérification de l'environnement: 'TacticiensEnv' object has no attribute 'last_move_coords'
+2025-04-09 11:03:37,256 - INFO - Début de l'entraînement pour 10000 étapes
+2025-04-09 11:03:37,266 - INFO - Début de l'entraînement
+2025-04-09 11:17:15,150 - INFO - Démarrage de l'entraînement SB3 DQN pour 100000 étapes
+2025-04-09 11:17:15,253 - INFO - Vérification de l'environnement réussie
+2025-04-09 11:17:18,308 - INFO - Début de l'entraînement pour 100000 étapes
+2025-04-09 11:17:18,317 - INFO - Début de l'entraînement
+2025-04-09 11:17:24,412 - INFO - Step: 1000 (6.10s)
+2025-04-09 11:17:24,412 - INFO -   Score moyen (100 derniers): -4.95
+2025-04-09 11:17:24,413 - INFO -   Longueur moyenne (100 derniers): 1.22
+2025-04-09 11:17:24,413 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:17:37,981 - INFO - Step: 2000 (19.66s)
+2025-04-09 11:17:37,982 - INFO -   Score moyen (100 derniers): -4.95
+2025-04-09 11:17:37,983 - INFO -   Longueur moyenne (100 derniers): 1.16
+2025-04-09 11:17:37,983 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:17:56,318 - INFO - Step: 3000 (38.00s)
+2025-04-09 11:17:56,319 - INFO -   Score moyen (100 derniers): -4.91
+2025-04-09 11:17:56,319 - INFO -   Longueur moyenne (100 derniers): 1.32
+2025-04-09 11:17:56,319 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:18:11,637 - INFO - Step: 4000 (53.32s)
+2025-04-09 11:18:11,638 - INFO -   Score moyen (100 derniers): -4.91
+2025-04-09 11:18:11,638 - INFO -   Longueur moyenne (100 derniers): 1.34
+2025-04-09 11:18:11,639 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:18:27,542 - INFO - Step: 5000 (69.22s)
+2025-04-09 11:18:27,543 - INFO -   Score moyen (100 derniers): -4.92
+2025-04-09 11:18:27,544 - INFO -   Longueur moyenne (100 derniers): 1.29
+2025-04-09 11:18:27,544 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:18:27,664 - INFO -   Évaluation: score=-5.00 ± 0.00
+2025-04-09 11:18:27,676 - INFO -   Nouveau meilleur modèle sauvegardé: ./best_models/best_model_5000_-5.00.zip
+2025-04-09 11:18:46,136 - INFO - Step: 6000 (87.82s)
+2025-04-09 11:18:46,137 - INFO -   Score moyen (100 derniers): -4.80
+2025-04-09 11:18:46,137 - INFO -   Longueur moyenne (100 derniers): 1.56
+2025-04-09 11:18:46,138 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:19:06,170 - INFO - Step: 7000 (107.85s)
+2025-04-09 11:19:06,171 - INFO -   Score moyen (100 derniers): -4.72
+2025-04-09 11:19:06,171 - INFO -   Longueur moyenne (100 derniers): 1.68
+2025-04-09 11:19:06,172 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:19:23,509 - INFO - Step: 8000 (125.19s)
+2025-04-09 11:19:23,510 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:19:23,511 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:19:23,512 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:19:36,681 - INFO - Step: 9000 (138.36s)
+2025-04-09 11:19:36,682 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:19:36,682 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:19:36,683 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:19:52,444 - INFO - Step: 10000 (154.13s)
+2025-04-09 11:19:52,445 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:19:52,446 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:19:52,446 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:19:52,545 - INFO -   Évaluation: score=-5.00 ± 0.00
+2025-04-09 11:20:08,885 - INFO - Step: 11000 (170.57s)
+2025-04-09 11:20:08,886 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:20:08,886 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:20:08,887 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:20:21,967 - INFO - Step: 12000 (183.65s)
+2025-04-09 11:20:21,968 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:20:21,969 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:20:21,970 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:20:38,399 - INFO - Step: 13000 (200.08s)
+2025-04-09 11:20:38,400 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:20:38,400 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:20:38,404 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:20:52,256 - INFO - Step: 14000 (213.94s)
+2025-04-09 11:20:52,267 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:20:52,270 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:20:52,271 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:21:06,716 - INFO - Step: 15000 (228.40s)
+2025-04-09 11:21:06,716 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:21:06,716 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:21:06,717 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:21:06,809 - INFO -   Évaluation: score=-5.00 ± 0.00
+2025-04-09 11:21:22,903 - INFO - Step: 16000 (244.59s)
+2025-04-09 11:21:22,905 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:21:22,905 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:21:22,906 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:21:39,265 - INFO - Step: 17000 (260.95s)
+2025-04-09 11:21:39,267 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:21:39,267 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:21:39,269 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:21:55,105 - INFO - Step: 18000 (276.79s)
+2025-04-09 11:21:55,106 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:21:55,106 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:21:55,107 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:22:11,598 - INFO - Step: 19000 (293.28s)
+2025-04-09 11:22:11,598 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:22:11,598 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:22:11,599 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:22:27,151 - INFO - Step: 20000 (308.83s)
+2025-04-09 11:22:27,152 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:22:27,153 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:22:27,153 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:22:27,292 - INFO -   Évaluation: score=-5.00 ± 0.00
+2025-04-09 11:22:40,783 - INFO - Step: 21000 (322.47s)
+2025-04-09 11:22:40,784 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:22:40,785 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:22:40,786 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:22:57,198 - INFO - Step: 22000 (338.88s)
+2025-04-09 11:22:57,199 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:22:57,200 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:22:57,200 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:23:08,764 - INFO - Step: 23000 (350.45s)
+2025-04-09 11:23:08,764 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:23:08,765 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:23:08,766 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:23:20,359 - INFO - Step: 24000 (362.04s)
+2025-04-09 11:23:20,360 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:23:20,360 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:23:20,361 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:23:31,826 - INFO - Step: 25000 (373.51s)
+2025-04-09 11:23:31,827 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:23:31,827 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:23:31,827 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:23:31,942 - INFO -   Évaluation: score=-5.00 ± 0.00
+2025-04-09 11:23:44,244 - INFO - Step: 26000 (385.93s)
+2025-04-09 11:23:44,244 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:23:44,245 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:23:44,245 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:23:53,337 - INFO - Step: 27000 (395.02s)
+2025-04-09 11:23:53,337 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:23:53,337 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:23:53,338 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:24:01,590 - INFO - Step: 28000 (403.27s)
+2025-04-09 11:24:01,590 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:24:01,591 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:24:01,591 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:24:10,636 - INFO - Step: 29000 (412.32s)
+2025-04-09 11:24:10,636 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:24:10,636 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:24:10,637 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:24:20,480 - INFO - Step: 30000 (422.16s)
+2025-04-09 11:24:20,480 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:24:20,481 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:24:20,481 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:24:20,562 - INFO -   Évaluation: score=-5.00 ± 0.00
+2025-04-09 11:24:30,749 - INFO - Step: 31000 (432.43s)
+2025-04-09 11:24:30,751 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:24:30,751 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:24:30,751 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:24:39,638 - INFO - Step: 32000 (441.32s)
+2025-04-09 11:24:39,639 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:24:39,639 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:24:39,640 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:24:48,321 - INFO - Step: 33000 (450.00s)
+2025-04-09 11:24:48,321 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:24:48,322 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:24:48,322 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:24:56,883 - INFO - Step: 34000 (458.57s)
+2025-04-09 11:24:56,884 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:24:56,884 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:24:56,884 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:25:04,799 - INFO - Step: 35000 (466.48s)
+2025-04-09 11:25:04,800 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:25:04,800 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:25:04,800 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:25:04,864 - INFO -   Évaluation: score=-5.00 ± 0.00
+2025-04-09 11:25:20,123 - INFO - Step: 36000 (481.80s)
+2025-04-09 11:25:20,129 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:25:20,130 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:25:20,130 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:25:33,218 - INFO - Step: 37000 (494.90s)
+2025-04-09 11:25:33,219 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:25:33,221 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:25:33,222 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:25:45,695 - INFO - Step: 38000 (507.38s)
+2025-04-09 11:25:45,699 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:25:45,699 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:25:45,700 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:25:56,684 - INFO - Step: 39000 (518.37s)
+2025-04-09 11:25:56,684 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:25:56,685 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:25:56,685 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:26:08,803 - INFO - Step: 40000 (530.49s)
+2025-04-09 11:26:08,804 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:26:08,804 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:26:08,805 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:26:08,917 - INFO -   Évaluation: score=-5.00 ± 0.00
+2025-04-09 11:26:23,855 - INFO - Step: 41000 (545.54s)
+2025-04-09 11:26:23,856 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:26:23,856 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:26:23,857 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:26:36,663 - INFO - Step: 42000 (558.35s)
+2025-04-09 11:26:36,663 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:26:36,664 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:26:36,664 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:26:49,720 - INFO - Step: 43000 (571.40s)
+2025-04-09 11:26:49,722 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:26:49,723 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:26:49,724 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:27:02,696 - INFO - Step: 44000 (584.38s)
+2025-04-09 11:27:02,697 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:27:02,697 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:27:02,698 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:27:15,690 - INFO - Step: 45000 (597.37s)
+2025-04-09 11:27:15,691 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:27:15,691 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:27:15,692 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:27:15,770 - INFO -   Évaluation: score=-5.00 ± 0.00
+2025-04-09 11:27:26,752 - INFO - Step: 46000 (608.43s)
+2025-04-09 11:27:26,752 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:27:26,753 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:27:26,753 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:27:38,733 - INFO - Step: 47000 (620.41s)
+2025-04-09 11:27:38,734 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:27:38,734 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:27:38,735 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:27:51,089 - INFO - Step: 48000 (632.77s)
+2025-04-09 11:27:51,090 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:27:51,091 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:27:51,091 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:28:07,119 - INFO - Step: 49000 (648.80s)
+2025-04-09 11:28:07,119 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:28:07,120 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:28:07,120 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:28:22,863 - INFO - Step: 50000 (664.55s)
+2025-04-09 11:28:22,864 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:28:22,865 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:28:22,866 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:28:22,997 - INFO -   Évaluation: score=-5.00 ± 0.00
+2025-04-09 11:28:36,805 - INFO - Step: 51000 (678.49s)
+2025-04-09 11:28:36,805 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:28:36,805 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:28:36,806 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:28:47,935 - INFO - Step: 52000 (689.62s)
+2025-04-09 11:28:47,935 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:28:47,936 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:28:47,936 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:29:01,691 - INFO - Step: 53000 (703.37s)
+2025-04-09 11:29:01,691 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:29:01,696 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:29:01,697 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:29:15,674 - INFO - Step: 54000 (717.36s)
+2025-04-09 11:29:15,675 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:29:15,675 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:29:15,676 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:29:28,260 - INFO - Step: 55000 (729.94s)
+2025-04-09 11:29:28,261 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:29:28,261 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:29:28,262 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:29:28,399 - INFO -   Évaluation: score=-5.00 ± 0.00
+2025-04-09 11:29:41,261 - INFO - Step: 56000 (742.94s)
+2025-04-09 11:29:41,262 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:29:41,262 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:29:41,263 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:29:55,260 - INFO - Step: 57000 (756.94s)
+2025-04-09 11:29:55,260 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:29:55,261 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:29:55,261 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:30:08,902 - INFO - Step: 58000 (770.59s)
+2025-04-09 11:30:08,903 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:30:08,904 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:30:08,904 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:30:20,345 - INFO - Step: 59000 (782.03s)
+2025-04-09 11:30:20,345 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:30:20,345 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:30:20,346 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:30:34,317 - INFO - Step: 60000 (796.00s)
+2025-04-09 11:30:34,317 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:30:34,318 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:30:34,318 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:30:34,411 - INFO -   Évaluation: score=-5.00 ± 0.00
+2025-04-09 11:30:48,843 - INFO - Step: 61000 (810.53s)
+2025-04-09 11:30:48,844 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:30:48,845 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:30:48,855 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:30:58,721 - INFO - Step: 62000 (820.40s)
+2025-04-09 11:30:58,721 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:30:58,721 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:30:58,722 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:31:08,414 - INFO - Step: 63000 (830.10s)
+2025-04-09 11:31:08,415 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:31:08,415 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:31:08,416 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:31:17,844 - INFO - Step: 64000 (839.53s)
+2025-04-09 11:31:17,845 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:31:17,845 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:31:17,846 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:31:27,518 - INFO - Step: 65000 (849.20s)
+2025-04-09 11:31:27,519 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:31:27,519 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:31:27,520 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:31:27,598 - INFO -   Évaluation: score=-5.00 ± 0.00
+2025-04-09 11:31:37,259 - INFO - Step: 66000 (858.94s)
+2025-04-09 11:31:37,260 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:31:37,260 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:31:37,261 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:31:46,990 - INFO - Step: 67000 (868.67s)
+2025-04-09 11:31:46,990 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:31:46,991 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:31:46,991 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:31:55,266 - INFO - Step: 68000 (876.95s)
+2025-04-09 11:31:55,267 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:31:55,267 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:31:55,267 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:32:04,750 - INFO - Step: 69000 (886.43s)
+2025-04-09 11:32:04,751 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:32:04,751 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:32:04,752 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:32:15,848 - INFO - Step: 70000 (897.53s)
+2025-04-09 11:32:15,848 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:32:15,849 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:32:15,849 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:32:15,922 - INFO -   Évaluation: score=-5.00 ± 0.00
+2025-04-09 11:32:26,813 - INFO - Step: 71000 (908.50s)
+2025-04-09 11:32:26,815 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:32:26,818 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:32:26,819 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:32:37,799 - INFO - Step: 72000 (919.48s)
+2025-04-09 11:32:37,800 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:32:37,800 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:32:37,801 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:32:48,865 - INFO - Step: 73000 (930.55s)
+2025-04-09 11:32:48,866 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:32:48,866 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:32:48,866 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:33:00,215 - INFO - Step: 74000 (941.90s)
+2025-04-09 11:33:00,215 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:33:00,216 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:33:00,216 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:33:10,653 - INFO - Step: 75000 (952.33s)
+2025-04-09 11:33:10,654 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:33:10,654 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:33:10,654 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:33:10,731 - INFO -   Évaluation: score=-5.00 ± 0.00
+2025-04-09 11:33:20,353 - INFO - Step: 76000 (962.04s)
+2025-04-09 11:33:20,354 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:33:20,354 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:33:20,355 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:33:29,740 - INFO - Step: 77000 (971.42s)
+2025-04-09 11:33:29,740 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:33:29,741 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:33:29,741 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:33:39,068 - INFO - Step: 78000 (980.75s)
+2025-04-09 11:33:39,069 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:33:39,069 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:33:39,069 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:33:48,234 - INFO - Step: 79000 (989.92s)
+2025-04-09 11:33:48,235 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:33:48,235 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:33:48,235 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:33:57,945 - INFO - Step: 80000 (999.63s)
+2025-04-09 11:33:57,946 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:33:57,946 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:33:57,946 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:33:58,021 - INFO -   Évaluation: score=-5.00 ± 0.00
+2025-04-09 11:34:06,973 - INFO - Step: 81000 (1008.66s)
+2025-04-09 11:34:06,973 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:34:06,973 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:34:06,974 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:34:16,249 - INFO - Step: 82000 (1017.93s)
+2025-04-09 11:34:16,249 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:34:16,250 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:34:16,250 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:34:25,486 - INFO - Step: 83000 (1027.17s)
+2025-04-09 11:34:25,486 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:34:25,486 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:34:25,487 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:34:34,992 - INFO - Step: 84000 (1036.67s)
+2025-04-09 11:34:34,992 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:34:34,993 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:34:34,993 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:34:43,885 - INFO - Step: 85000 (1045.57s)
+2025-04-09 11:34:43,886 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:34:43,886 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:34:43,887 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:34:43,956 - INFO -   Évaluation: score=-5.00 ± 0.00
+2025-04-09 11:34:53,463 - INFO - Step: 86000 (1055.15s)
+2025-04-09 11:34:53,463 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:34:53,464 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:34:53,464 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:35:02,588 - INFO - Step: 87000 (1064.27s)
+2025-04-09 11:35:02,589 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:35:02,589 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:35:02,590 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:35:11,842 - INFO - Step: 88000 (1073.52s)
+2025-04-09 11:35:11,843 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:35:11,843 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:35:11,844 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:35:20,670 - INFO - Step: 89000 (1082.35s)
+2025-04-09 11:35:20,670 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:35:20,671 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:35:20,671 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:35:29,963 - INFO - Step: 90000 (1091.65s)
+2025-04-09 11:35:29,963 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:35:29,964 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:35:29,964 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:35:30,040 - INFO -   Évaluation: score=-5.00 ± 0.00
+2025-04-09 11:35:39,363 - INFO - Step: 91000 (1101.05s)
+2025-04-09 11:35:39,364 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:35:39,364 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:35:39,365 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:35:49,536 - INFO - Step: 92000 (1111.22s)
+2025-04-09 11:35:49,536 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:35:49,536 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:35:49,537 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:35:58,595 - INFO - Step: 93000 (1120.28s)
+2025-04-09 11:35:58,595 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:35:58,596 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:35:58,596 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:36:08,337 - INFO - Step: 94000 (1130.02s)
+2025-04-09 11:36:08,337 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:36:08,338 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:36:08,338 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:36:17,359 - INFO - Step: 95000 (1139.04s)
+2025-04-09 11:36:17,359 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:36:17,359 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:36:17,360 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:36:17,436 - INFO -   Évaluation: score=-5.00 ± 0.00
+2025-04-09 11:36:26,704 - INFO - Step: 96000 (1148.39s)
+2025-04-09 11:36:26,704 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:36:26,704 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:36:26,705 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:36:35,540 - INFO - Step: 97000 (1157.22s)
+2025-04-09 11:36:35,540 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:36:35,541 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:36:35,541 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:36:45,075 - INFO - Step: 98000 (1166.76s)
+2025-04-09 11:36:45,076 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:36:45,076 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:36:45,077 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:36:54,245 - INFO - Step: 99000 (1175.93s)
+2025-04-09 11:36:54,245 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:36:54,245 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:36:54,246 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:37:03,343 - INFO - Step: 100000 (1185.02s)
+2025-04-09 11:37:03,343 - INFO -   Score moyen (100 derniers): -5.00
+2025-04-09 11:37:03,344 - INFO -   Longueur moyenne (100 derniers): 1.00
+2025-04-09 11:37:03,344 - INFO -   Taux de victoire (100 derniers): 0.00%
+2025-04-09 11:37:03,442 - INFO -   Évaluation: score=-5.00 ± 0.00
+2025-04-09 11:37:03,482 - INFO - Fin de l'entraînement: 1185.15s, 98256 épisodes
+2025-04-09 11:37:03,485 - INFO - Score moyen: -4.99
+2025-04-09 11:37:03,485 - INFO - Taux de victoire: 0.00%
+2025-04-09 11:37:03,486 - INFO - Meilleur modèle: ./best_models/best_model_5000_-5.00.zip (score: -5.00)
+2025-04-09 11:37:04,583 - INFO - Courbes d'apprentissage sauvegardées dans ./learning_curves_sb3.png
+2025-04-09 11:37:04,583 - INFO - Entraînement terminé en 1186.27 secondes
+2025-04-09 11:37:04,592 - INFO - Modèle final sauvegardé dans ./models/sb3_dqn\dqn_final_model
+2025-04-09 11:37:04,593 - INFO - Entraînement SB3 DQN terminé

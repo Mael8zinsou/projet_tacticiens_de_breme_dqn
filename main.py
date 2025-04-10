@@ -4,6 +4,8 @@ from game.env_var import *
 from game.game import Game
 from ai.Minimax import Minimax
 from ai.dummyAI import Dummyai
+from ai.dqn_agent import DQNAgent
+from ai.sb3_agent import DQN_sb3_Agent
 import csv
 from datetime import datetime
 
@@ -114,7 +116,8 @@ def main():
                 color = "orange"
 
             # Obtenir les mouvements possibles
-            game.all_next_moves(color)
+            valid=game.all_next_moves(color)
+            print("Valid moves:", valid)
             move = None
 
             # Obtenir le mouvement (IA ou humain)
