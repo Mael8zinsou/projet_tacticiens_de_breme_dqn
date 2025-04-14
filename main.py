@@ -4,229 +4,333 @@ from game.env_var import *
 from game.game import Game
 from ai.Minimax import Minimax
 from ai.dummyAI import Dummyai
-from ai.dqn_agent import DQNAgent
-from ai.sb3_agent import DQN_sb3_Agent
 import csv
 from datetime import datetime
 
-# Paramètres du jeu
-manual_mode = True    # True: placement manuel des pions, False: placement aléatoire
-use_ai = True         # True: utiliser l'IA, False: jouer manuellement
-ai_types = (1, 1)     # Types d'IA: 1 pour Minimax, 2 pour IA aléatoire (DummyAI)
-
+# Parameters
+MANUAL_MODE = False # True pour placer les pions manuellement, False pour placement aléatoire
+USE_AI = True # True pour utiliser l'IA, False pour jouer manuellement
+AI_TYPES = (2, 1) # Types d'IA: 1 pour Minimax, 2 pour IA aléatoire
+MAX_TURNS = 200 # Nombre maximum de tours avant d'arrêter la partie 
+MAX_GAMES = 1 # Nombre de parties à jouer
 
 def main():
     """
     Fonction principale du programme.
+    Initialise le jeu et gère la boucle principale.
     """
-    # Initialiser le gestionnaire de données
-    # Note: pour écraser un fichier CSV existant, définir le paramètre overwrite à True
-    # et url au chemin du fichier à écraser
+    # Initialisation du gestionnaire de données
+    # Note: pour écraser un fichier CSV existant, définir overwrite=True
     data_manager = DataManager(False, "./data/dataset/game_RR.csv")
 
-    # Initialiser le jeu
-    # Note: quand manual_mode est False et use_ai est True, nous devons définir ai_types à 1 pour
-    # Minimax et 2 pour l'IA aléatoire
-    game = Game(data_manager, manual_mode, use_ai, ai_types)
+    # Initialisation du jeu  
+    game = Game(data_manager, MANUAL_MODE, USE_AI, AI_TYPES)  
 
-    # Obtenir l'heure actuelle
-    start_time = datetime.now().strftime("%Y%m%d_%H%M%S")
+    # Enregistrement du temps de début  
+    start_time = datetime.now().strftime("%Y%m%d_%H%M%S")  
 
-    # Nombre de parties à jouer
-    loop = 1
-    while loop > 0:
-        if loop < 500:
-            game.reset()
-            print(loop)
-            loop -= 1
+    # Boucle pour jouer plusieurs parties  
+    games_remaining = MAX_GAMES  
+    while games_remaining > 0:  
+        if games_remaining < 500:  # Protection contre les boucles infinies  
+            game.reset()  
+            print(f"Partie {MAX_GAMES - games_remaining + 1}/{MAX_GAMES}")  
+            games_remaining -= 1  
 
-        is_ai = game.use_ai
-        counter = 0
-        color = ""
-        ispawnmoved = False
+        # Initialisation des variables de jeu  
+        counter = 0  # Compteur de tours  
+        color = ""   # Couleur du joueur actuel  
+        
+        # Initialisation des IA si nécessaire  
+        if game.use_ai:  
+            aiblue, aiorange = initialize_ai(game)  
 
-        # Initialiser les IA si nécessaire
-        if game.use_ai:
-            # Sélectionner les types d'IA en fonction des paramètres
-            if game.ai_types[0] == 1 and game.ai_types[1] == 1:
-                aiblue = Minimax("blue", game)
-                aiorange = Minimax("orange", game)
-            elif game.ai_types[0] == 1 and game.ai_types[1] == 2:
-                aiblue = Minimax("blue", game)
-                aiorange = Dummyai("orange")
-            elif game.ai_types[0] == 2 and game.ai_types[1] == 1:
-                aiblue = Dummyai("blue")
-                aiorange = Minimax("orange", game)
-            elif game.ai_types[0] == 2 and game.ai_types[1] == 2:
-                aiblue = Dummyai("blue")
-                aiorange = Dummyai("orange")
-            else:
-                # Par défaut, utiliser Minimax
-                aiblue = Minimax("blue", game)
-                aiorange = Minimax("orange", game)
+        # Création d'un fichier CSV pour enregistrer les mouvements  
+        move_log_filename = create_move_log_file()  
 
-        # Créer un nouveau fichier CSV pour enregistrer les mouvements
-        path = "./CSV/"
-        os.makedirs(path, exist_ok=True)  # Créer le dossier s'il n'existe pas
-        time_str = datetime.now().strftime('%Y%m%d_%H%M%S')
-        move_log_filename = f"{path}game_moves_{time_str}.csv"
+        # Boucle principale de jeu  
+        game_result = play_game(game, aiblue, aiorange, data_manager, move_log_filename, counter)  
+        
+        # Si la partie est terminée normalement, supprimer le fichier de log temporaire  
+        if game_result == "completed" and os.path.exists(move_log_filename):  
+            os.remove(move_log_filename)  
 
-        with open(move_log_filename, mode='w', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow(["Color", "Pawn", "X", "Y", "Turn"])  # En-tête
+    # Affichage de la durée totale  
+    end_time = datetime.now().strftime("%Y%m%d_%H%M%S")  
+    duration = datetime.strptime(end_time, "%Y%m%d_%H%M%S") - datetime.strptime(start_time, "%Y%m%d_%H%M%S")  
+    print(f"Durée totale: {duration}")  
 
-        # Boucle principale du jeu
-        while True:
-            counterinit = 0
+def initialize_ai(game):
+    """
+    Initialise les IA en fonction des types spécifiés.
 
-            # Vérifier si la grille est cassée
-            if game.grid.isbroken:
-                print("game is broken")
-                print("Game ended in", counter, "turns")
-                for pawn in game.pawns:
-                    pawn.display()
-                break
+    Args:  
+        game: Instance du jeu  
+        
+    Returns:  
+        tuple: (IA bleue, IA orange)  
+    """  
+    ai_type_blue, ai_type_orange = game.ai_types  
+    
+    # Initialisation de l'IA bleue  
+    if ai_type_blue == 1:  
+        aiblue = Minimax("blue", game)  
+    elif ai_type_blue == 2:  
+        aiblue = Dummyai("blue")  
+    else:  
+        aiblue = Minimax("blue", game)  # Par défaut  
+    
+    # Initialisation de l'IA orange  
+    if ai_type_orange == 1:  
+        aiorange = Minimax("orange", game)  
+    elif ai_type_orange == 2:  
+        aiorange = Dummyai("orange")  
+    else:  
+        aiorange = Minimax("orange", game)  # Par défaut  
+        
+    return aiblue, aiorange  
 
-            # Vérifier si le dernier mouvement était une retraite
+def create_move_log_file():
+    """
+    Crée un fichier CSV pour enregistrer les mouvements.
+
+    Returns:  
+        str: Chemin du fichier créé  
+    """  
+    path = "./CSV/"  
+    os.makedirs(path, exist_ok=True)  # Crée le répertoire s'il n'existe pas  
+    
+    time = datetime.now().strftime('%Y%m%d_%H%M%S')  
+    move_log_filename = f"{path}game_moves_{time}.csv"  
+    
+    with open(move_log_filename, mode='w', newline='') as file:  
+        writer = csv.writer(file)  
+        writer.writerow(["Color", "Pawn", "X", "Y", "Turn"])  # En-tête  
+        
+    return move_log_filename  
+
+def play_game(game, aiblue, aiorange, data_manager, move_log_filename, counter=0):
+    """
+    Exécute une partie complète.
+
+    Args:
+        game: Instance du jeu
+        aiblue: IA pour le joueur bleu
+        aiorange: IA pour le joueur orange
+        data_manager: Gestionnaire de données
+        move_log_filename: Chemin du fichier de log des mouvements
+        counter: Compteur de tours initial
+
+    Returns:
+        str: Résultat de la partie ("completed", "broken", "timeout")
+    """
+    while counter < MAX_TURNS:
+        # Vérification de l'intégrité de la grille
+        if game.grid.isbroken:
+            print("La grille est dans un état invalide")
+            print(f"Partie terminée en {counter} tours")
+            for pawn in game.pawns:
+                pawn.display()
+            return "broken"
+
+        # Lecture du dernier mouvement pour vérifier la retraite
+        try:
             with open(move_log_filename, mode='r', newline='') as file:
-                moves = list(csv.reader(file))
-                if len(moves) > 1:  # S'assurer qu'il y a au moins un mouvement
-                    last_move = moves[-1]
+                reader = csv.reader(file)
+                rows = list(reader)
+                if len(rows) > 1:  # S'assurer qu'il y a au moins une ligne après l'en-tête
+                    last_move = rows[-1]
                     if game.isretraite(last_move):
                         game.num_retreat += 1
+        except (IndexError, FileNotFoundError):
+            pass  # Pas de mouvement précédent
 
-            # Vérifier si le jeu est toujours en phase d'initialisation
-            for pawn in game.pawns:
-                if pawn.color == "blue" and pawn.y == 0:
-                    counterinit += 1
-                elif pawn.color == "orange" and pawn.y == 4:
-                    counterinit += 1
+        # Vérification de la phase d'initialisation
+        check_initialization_phase(game)
 
-            if counterinit == 8:
-                print("finish initialisation of the game")
-                game.initializing = False
+        # Vérification de l'intégrité de la grille si le jeu n'est plus en phase d'initialisation
+        if not game.initializing:
+            game.grid.checkgrid(counter)
 
-            if game.initializing == False:
-                game.grid.checkgrid(counter)
+        # Détermination du joueur actuel
+        color = "blue" if counter % 2 == 0 else "orange"
+        print(f"Tour {counter}: {color}")
 
-            # Déterminer le joueur actuel
-            if counter % 2 == 0:
-                color = "blue"
+        # Obtention des mouvements possibles
+        possible_moves = game.all_next_moves(color)
+
+        if not possible_moves:
+            print(f"Aucun mouvement possible pour {color}")
+            return "timeout"
+
+        # Obtention du mouvement à jouer
+        move = get_next_move(game, color, aiblue, aiorange, possible_moves)
+
+        # Traitement du mouvement
+        if move:
+            # Cas spécial: pas de mouvement possible
+            if move[1] == -1:
+                return "timeout"
+
+            # Exécution du mouvement
+            result = execute_move(game, move, color, data_manager, counter, move_log_filename)
+
+            # Vérification de la victoire
+            if result == "victory":
+                return "completed"
+
+            # Incrémentation du compteur si le mouvement est valide
+            counter += 1
+        else:
+            print(f"Aucun mouvement valide pour {color}")
+            return "timeout"
+
+    # Si on atteint le nombre maximum de tours
+    print(f"Partie arrêtée après {MAX_TURNS} tours (limite atteinte)")
+    return "timeout"  
+
+def check_initialization_phase(game):
+    """
+    Vérifie si le jeu est toujours en phase d'initialisation.
+
+    Args:  
+        game: Instance du jeu  
+    """  
+    counterinit = 0  
+    for pawn in game.pawns:  
+        if pawn.color == "blue" and pawn.y == 0:  
+            counterinit += 1  
+        elif pawn.color == "orange" and pawn.y == 4:  
+            counterinit += 1  
+    
+    if counterinit == 8:  
+        print("Fin de l'initialisation du jeu")  
+        game.initializing = False  
+
+def get_next_move(game, color, aiblue, aiorange, possible_moves):
+    """
+    Obtient le prochain mouvement à jouer.
+
+    Args:  
+        game: Instance du jeu  
+        color: Couleur du joueur actuel  
+        aiblue: IA pour le joueur bleu  
+        aiorange: IA pour le joueur orange  
+        possible_moves: Liste des mouvements possibles  
+        
+    Returns:  
+        list: Mouvement à jouer [color, pawn_type, x, y]  
+    """  
+    if game.use_ai:  
+        ai = aiblue if color == "blue" else aiorange  
+        
+        if ai.type == "M":  # Minimax  
+            print("IA Minimax")  
+            move = ai.playsmart()  
+            if move:  
+                print(f"L'IA {color} choisit de déplacer le pion {move[1]} vers ({move[2]}, {move[3]})")  
+        else:  # IA aléatoire  
+            print("IA aléatoire")  
+            move = ai.playrandom(possible_moves)  
+            try:  
+                pawn_to_move = move[1]  
+                x, y = move[2], move[3]  
+                print(f"L'IA aléatoire {color} choisit de déplacer le pion {pawn_to_move} vers ({x}, {y})")  
+            except:  
+                print("Aucun mouvement disponible")  
+                return None  
+    else:  
+        # Mode manuel  
+        try:  
+            pawn_to_move = float(input("Sélectionnez un pion: ") or 1.)  
+            x = int(input("x: ") or 1)  
+            y = int(input("y: ") or 1)  
+            move = [color, pawn_to_move, x, y]  
+        except:  
+            print("Entrée invalide")  
+            return None  
+            
+    return move  
+
+def execute_move(game, move, color, data_manager, counter, move_log_filename):
+    """
+    Exécute un mouvement et vérifie s'il conduit à une victoire.
+    """
+    pawn_to_move, x, y = move[1], move[2], move[3]
+
+    # Cas spécial: pas de mouvement possible
+    if pawn_to_move == -1:
+        return None
+
+    # Mise à jour de l'historique du pion
+    if data_manager:
+        data_manager.update_pawn_history(color, pawn_to_move, (x, y), counter)
+
+    # Recherche du pion à déplacer
+    ispawnmoved = [False, False]
+    for pawn in game.pawns:
+        if pawn.type == pawn_to_move and pawn.color == color:
+            # Vérification des règles de retraite
+            if not pawns_must_play[color]:
+                ispawnmoved = pawn.move(x, y, game.grid, game.pawns, game)
+            elif pawn in pawns_must_play[color]:
+                ispawnmoved = pawn.move(x, y, game.grid, game.pawns, game)
+                if pawn in pawns_must_play[color]:  # Vérifier si le pion est toujours dans la liste
+                    pawns_must_play[color].remove(pawn)
             else:
-                color = "orange"
+                print(f"Vous devez jouer avec le(s) pion(s) en retraite: {', '.join([str(p.type) for p in pawns_must_play[color]])}")
+                ispawnmoved = [False, False]
 
-            # Obtenir les mouvements possibles
-            valid=game.all_next_moves(color)
-            print("Valid moves:", valid)
-            move = None
+    # Si le mouvement est valide, l'enregistrer
+    if ispawnmoved[0]:
+        with open(move_log_filename, mode='a', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow([color, pawn_to_move, x, y, counter])
 
-            # Obtenir le mouvement (IA ou humain)
-            if game.use_ai:
-                ai = aiblue if color == "blue" else aiorange
+        # Vérification de la victoire
+        if ispawnmoved[1]:
+            print("Partie terminée")
+            print(f"Le gagnant est... {color} !!!")
+            print(f"Partie terminée en {counter} tours")
 
-                if ai.type == "M":
-                    print("MINMAX AI")
-                    move = ai.playsmart()  # Obtenir le meilleur mouvement de l'IA
+            # Enregistrement des données de fin de partie
+            final_stack = game.grid.getfinalstack(x, y)
+            ai_info = get_ai_info(game, aiblue, aiorange)
+            if data_manager:
+                data_manager.write(ai_info, color, counter, game.num_retreat, final_stack)
+            game.winner = color
 
-                    if move:
-                        if move[1] == -1:  # Pas de mouvement valide
-                            os.remove(move_log_filename)
-                            loop += 1
-                            break
+            return "victory"
 
-                        print(f"AI {color} chooses to move pawn {move[1]} to ({move[2]}, {move[3]})")
-                        # Mettre à jour l'historique du pion
-                        data_manager.update_pawn_history(color, move[1], (move[2], move[3]), counter)
-                else:
-                    print("RANDOM AI")
-                    move = ai.playrandom(game.all_next_moves(color))
+        return "valid_move"
+    else:
+        print(f"Mouvement invalide pour {color}: pion {pawn_to_move} vers ({x}, {y})")
+        return "invalid_move"  
 
-                    try:
-                        pawn_to_move = move[1]
-                        x = move[2]
-                        y = move[3]
-                        print(f"RANDOMAI {color} chooses to move pawn {pawn_to_move} to ({x}, {y})")
-                        # Mettre à jour l'historique du pion
-                        data_manager.update_pawn_history(color, move[1], (move[2], move[3]), counter)
-                    except:
-                        print("No moves available")
-                        game.grid.display()
-                        loop = 0
-                        break
-            else:
-                # Entrée utilisateur pour le mouvement
-                try:
-                    pawn_to_move = float(input("Select pawn:") or 1.)
-                    x = int(input("x:") or 1.)
-                    y = int(input("y:") or 1.)
-                    move = [color, pawn_to_move, x, y]
-                except:
-                    print("Invalid input")
-                    continue
+def get_ai_info(game, aiblue, aiorange):
+    """
+    Obtient les informations sur les IA utilisées.
 
-            # Traiter le mouvement
-            if move:
-                pawn_to_move, x, y = move[1], move[2], move[3]
-
-                if pawn_to_move == -1:
-                    # Situation bloquante pour un joueur
-                    break
-
-                # Vérifier si le pion à déplacer est dans la liste des pions qui doivent jouer
-                for pawn in game.pawns:
-                    if pawn.type == pawn_to_move and pawn.color == color:
-                        if pawns_must_play[color] == []:
-                            ispawnmoved = pawn.move(x, y, game.grid, game.pawns, game)
-                        else:
-                            if pawn in pawns_must_play[color]:
-                                ispawnmoved = pawn.move(x, y, game.grid, game.pawns, game)
-                                pawns_must_play[color].remove(pawn)
-                            else:
-                                # Le pion n'est pas dans la zone de retraite
-                                ispawnmoved = [False, False]
-
-                if ispawnmoved[0]:
-                    # Enregistrer le mouvement dans le fichier CSV
-                    with open(move_log_filename, mode='a', newline='') as file:
-                        writer = csv.writer(file)
-                        writer.writerow([color, pawn_to_move, x, y, counter])
-
-                    # Vérifier si le jeu est gagné
-                    if ispawnmoved[1]:
-                        print("Game Over")
-                        print("And the winner is....", color, "!!!")
-                        print("Game ended in", counter, "turns")
-
-                        # Obtenir la pile finale
-                        final_stack = game.grid.getfinalstack(x, y)
-
-                        # Informations sur les IA
-                        ai = [
-                            {"type": aiblue.type,
-                             "depth": aiblue.base_depth if aiblue.type == "M" else None,
-                             "color": "BLUE"},
-                            {"type": aiorange.type,
-                             "depth": aiorange.base_depth if aiorange.type == "M" else None,
-                             "color": "ORANGE"}
-                        ]
-
-                        # Enregistrer les résultats
-                        data_manager.write(ai, color, counter, game.num_retreat, final_stack)
-                        game.winner = color
-
-                        # Nettoyer le fichier de log
-                        os.remove(move_log_filename)
-                        break
-
-                # Incrémenter le compteur si le joueur a joué un mouvement valide
-                if ispawnmoved[0]:
-                    counter += 1
-
-        # Calculer la durée de la partie
-        end_time = datetime.now().strftime("%Y%m%d_%H%M%S")
-        duration = datetime.strptime(end_time, "%Y%m%d_%H%M%S") - datetime.strptime(start_time, "%Y%m%d_%H%M%S")
-        print("Duration:", duration)
-
+    Args:  
+        game: Instance du jeu  
+        aiblue: IA pour le joueur bleu  
+        aiorange: IA pour le joueur orange  
+        
+    Returns:  
+        list: Informations sur les IA  
+    """  
+    return [  
+        {  
+            "type": aiblue.type,  
+            "depth": aiblue.base_depth if hasattr(aiblue, "base_depth") else None,  
+            "color": "BLUE"  
+        },  
+        {  
+            "type": aiorange.type,  
+            "depth": aiorange.base_depth if hasattr(aiorange, "base_depth") else None,  
+            "color": "ORANGE"  
+        }  
+    ]  
 
 if __name__ == "__main__":
     main()

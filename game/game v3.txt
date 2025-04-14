@@ -1,0 +1,221 @@
+import numpy as np
+from game.pawn import Pawn
+from game.grid import Grid
+from game.mouvement import Mouvement
+from game.env_var import *
+import copy
+
+# Constantes
+STACK_MULTIPLIER = 2000
+WINNING_STACK_BONUS = 10000
+BONUS_COLOR = 500
+THREAT_MULTIPLIER = 500
+MAX_GRID_SIZE = 5
+
+class Game:
+"""
+Classe principale représentant le moteur du jeu Tacticiens de Brême.
+Gère l'initialisation, les mouvements, et l'évaluation du plateau.
+"""
+
+def __init__(self, data_manager=None, manual_mode=False, use_ai=False, ai_types=None):  
+    """  
+    Initialise le jeu.  
+    :param data_manager: Gestionnaire de données pour enregistrer les mouvements.  
+    :param manual_mode: Mode manuel pour le placement des pions.  
+    :param use_ai: Indique si l'IA est utilisée.  
+    :param ai_types: Types d'IA (1 pour Minimax, 2 pour DummyAI).  
+    """  
+    self.data_manager = data_manager  
+    self.pawns = []  
+    self.num_retreat = 0  
+    self.mode = manual_mode  
+    self.initializing = True  
+    self.use_ai = use_ai  
+    self.ai_types = ai_types if ai_types else (0, 0)  
+    self.winner = None  
+
+    if manual_mode:  
+        manual_placement = self._get_user_input("\nDo you want to place the pawns manually? (y/n): ", ["y", "Y", "n", "N"])  
+        if manual_placement.lower() == "n":  
+            self.init_pawns("blue")  
+            self.init_pawns("orange")  
+        else:  
+            self.init_pawns_manually()  
+    else:  
+        if not ai_types:  
+            raise ValueError("AI types must be specified when manual mode is False")  
+        self.init_infinite()  
+
+    # Initialiser la grille et l'afficher  
+    self.grid = Grid(MAX_GRID_SIZE, self.pawns)  
+    self.grid.display()  
+
+def reset(self):  
+    """  
+    Réinitialise le jeu.  
+    """  
+    self.pawns = []  
+    self.num_retreat = 0  
+    self.initializing = True  
+    self.winner = None  
+    self.init_infinite()  
+    self.grid = Grid(MAX_GRID_SIZE, self.pawns)  
+    self.grid.display()  
+
+# ----  
+# Initialisation des pions  
+# ----  
+
+def init_infinite(self):  
+    """  
+    Initialise les pions pour les deux joueurs en mode automatique.  
+    """  
+    self.init_pawns("blue")  
+    self.init_pawns("orange")  
+    self.use_ai = True  
+
+def init_pawns(self, color):  
+    """  
+    Place les pions automatiquement sur le plateau.  
+    :param color: Couleur des pions ("blue" ou "orange").  
+    """  
+    mouvs = list(basic_mouvements.keys())  
+    used_positions = []  
+
+    for i in range(4):  
+        # Générer une position unique  
+        next_pos = self._get_unique_random_position(used_positions)  
+
+        # Créer et ajouter le pion  
+        y_pos = 0 if color == "blue" else 4  
+        pawn = Pawn(next_pos, y_pos, i + 1, mouvs[i], color)  
+        self.pawns.append(pawn)  
+
+        # Mettre à jour le data_manager  
+        if self.data_manager:  
+            self.data_manager.set_initial_pos(color, i + 1, (next_pos, y_pos))  
+
+def _get_unique_random_position(self, used_positions):  
+    """  
+    Génère une position aléatoire unique.  
+    :param used_positions: Liste des positions déjà utilisées.  
+    :return: Une position unique.  
+    """  
+    while True:  
+        pos = np.random.randint(0, MAX_GRID_SIZE)  
+        if pos not in used_positions:  
+            used_positions.append(pos)  
+            return pos  
+
+def init_pawns_manually(self):  
+    """  
+    Place les pions manuellement sur le plateau.  
+    """  
+    mouvs = list(basic_mouvements.keys())  
+    positions_blue = []  
+    positions_orange = []  
+
+    # Placer les pions bleus  
+    print("Placement des pions BLEUS")  
+    for i in range(4):  
+        self._place_single_pawn("blue", i, positions_blue, mouvs)  
+
+    # Placer les pions oranges  
+    print("Placement des pions ORANGES")  
+    for i in range(4):  
+        self._place_single_pawn("orange", i, positions_orange, mouvs)  
+
+    print("All pawns placed")  
+    print("----Starting game----")  
+
+def _place_single_pawn(self, color, index, positions, mouvs):  
+    """  
+    Place un seul pion manuellement.  
+    :param color: Couleur du pion.  
+    :param index: Index du pion.  
+    :param positions: Liste des positions déjà utilisées.  
+    :param mouvs: Liste des mouvements possibles.  
+    """  
+    y = 0 if color == "blue" else 4  
+
+    while True:  
+        try:  
+            print(f"Placing {color}'s pawn {index + 1}")  
+            x = int(input("x (0-4): ") or 1)  
+
+            if 0 <= x_SIZE and x not in positions:  
+                pawn = Pawn(x, y, index + 1, mouvs[index], color)  
+                self.pawns.append(pawn)  
+                positions.append(x)  
+                break  
+            else:  
+                print("Invalid position or already used")  
+        except ValueError:  
+            print("Invalid input. Please enter a number.")  
+
+# ----  
+# Gestion des mouvements  
+# ----  
+
+def all_next_moves(self, color):  
+    """  
+    Retourne tous les mouvements possibles pour une couleur donnée.  
+    :param color: Couleur des pions ("blue" ou "orange").  
+    :return: Liste des mouvements possibles.  
+    """  
+    if self.initializing:  
+        return self._get_initialization_moves(color)  
+    return self._get_normal_moves(color)  
+
+def _get_initialization_moves(self, color):  
+    """  
+    Obtient les mouvements possibles pendant la phase d'initialisation.  
+    :param color: Couleur des pions ("blue" ou "orange").  
+    :return: Liste des mouvements possibles.  
+    """  
+    next_moves = []  
+    for pawn in self.pawns:  
+        if pawn.color == color and pawn.x == -1:  
+            y_pos = 0 if color == "blue" else 4  
+            for x in range(MAX_GRID_SIZE):  
+                if self.grid.grid[y_pos][x] == 0:  
+                    next_moves.append([pawn.color, pawn.type, x, y_pos])  
+    return next_moves  
+
+def _get_normal_moves(self, color):  
+    """  
+    Obtient les mouvements possibles pendant la phase normale du jeu.  
+    :param color: Couleur des pions ("blue" ou "orange").  
+    :return: Liste des mouvements possibles.  
+    """  
+    next_moves = []  
+    for pawn in self.pawns:  
+        if pawn.color != color:  
+            continue  
+
+        for x in range(MAX_GRID_SIZE):  
+            for y in range(MAX_GRID_SIZE):  
+                if (pawn.x != x or pawn.y != y) and Mouvement.legit_mouv(pawn, pawn, x, y, self.grid):  
+                    next_moves.append([pawn.color, pawn.type, x, y])  
+
+    return next_moves  
+
+# ----  
+# Utilitaires  
+# ----  
+
+@staticmethod  
+def _get_user_input(message, valid_inputs):  
+    """  
+    Demande à l'utilisateur une entrée valide.  
+    :param message: Message à afficher.  
+    :param valid_inputs: Liste des entrées valides.  
+    :return: Entrée utilisateur valide.  
+    """  
+    user_input = None  
+    while user_input not in valid_inputs:  
+        user_input = input(message)  
+        if user_input not in valid_inputs:  
+            print("Invalid input")  
+    return user_input

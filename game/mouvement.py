@@ -2,130 +2,98 @@ from game.env_var import *
 
 class Mouvement:
     """
-    Classe gérant les règles de déplacement des pions.
-    Vérifie si un mouvement est légal selon le type de mouvement du pion.
+    Classe gérant les mouvements des pions dans le jeu.
     """
 
-    @staticmethod
-    def legit_mouv(pawn, self, x, y, grid):
-        """
-        Vérifie si un mouvement est légal pour un pion donné.
-
-        Args:
-            pawn: Le pion à déplacer
-            self: Référence au pion (même que pawn, redondant)
-            x: Coordonnée x de destination
-            y: Coordonnée y de destination
-            grid: La grille de jeu
-
-        Returns:
-            bool: True si le mouvement est légal, False sinon
-        """
-        # Vérifier que la destination est dans la grille et que le pion peut être empilé
-        grid_size = len(grid.grid)
-        if not (0 <= x < grid_size and 0 <= y < grid_size):
-            return False
-
-        if not (grid.grid[y][x][-1] > pawn.type or grid.grid[y][x][-1] == 0):
-            return False
-
-        # Calculer la distance entre la position actuelle et la destination
-        dx, dy = distance(pawn, x, y)
-
-        # Vérifier selon le type de mouvement
-        if pawn.mouvement == "L":
-            return Mouvement._check_L_movement(dx, dy)
-        elif pawn.mouvement == "+":
-            return Mouvement._check_plus_movement(pawn, x, y, dx, dy, grid)
-        elif pawn.mouvement == "X":
-            return Mouvement._check_X_movement(pawn, x, y, dx, dy, grid)
-        elif pawn.mouvement == "*":
-            return Mouvement._check_star_movement(pawn, x, y, dx, dy, grid)
-
-        return False
-
-    @staticmethod
-    def _check_L_movement(dx, dy):
-        """
-        Vérifie si un mouvement en L est légal.
-        """
-        return (dx == 2 and dy == 1) or (dx == 1 and dy == 2)
-
-    @staticmethod
-    def _check_plus_movement(pawn, x, y, dx, dy, grid):
-        """
-        Vérifie si un mouvement en + est légal.
-        """
-        # Le mouvement doit être horizontal ou vertical
-        if not ((dx > 0 and dy == 0) or (dx == 0 and dy > 0)):
-            return False
-
-        # Vérifier qu'il n'y a pas d'obstacle sur le chemin
-        if dx == 0:  # Mouvement vertical
-            start_y = min(pawn.y, y) + 1
-            end_y = max(pawn.y, y)
-            for i in range(start_y, end_y):
-                if grid.grid[i][x][-1] != 0:
-                    return False
-        else:  # Mouvement horizontal
-            start_x = min(pawn.x, x) + 1
-            end_x = max(pawn.x, x)
-            for i in range(start_x, end_x):
-                if grid.grid[y][i][-1] != 0:
-                    return False
-
-        return True
-
-    @staticmethod
-    def _check_X_movement(pawn, x, y, dx, dy, grid):
-        """
-        Vérifie si un mouvement en X est légal.
-        """
-        # Le mouvement doit être diagonal
-        if dx != dy:
-            return False
-
-        # Déterminer la direction du mouvement
-        x_step = 1 if x > pawn.x else -1
-        y_step = 1 if y > pawn.y else -1
-
-        # Vérifier qu'il n'y a pas d'obstacle sur le chemin
-        current_x = pawn.x + x_step
-        current_y = pawn.y + y_step
-
-        while current_x != x and current_y != y:
-            if grid.grid[current_y][current_x][-1] != 0 and pawn.type >= grid.grid[current_y][current_x][-1]:
-                return False
-            current_x += x_step
-            current_y += y_step
-
-        return True
-
-    @staticmethod
-    def _check_star_movement(pawn, x, y, dx, dy, grid):
-        """
-        Vérifie si un mouvement en * est légal.
-        """
-        # Le mouvement doit être horizontal, vertical ou diagonal
-        if not ((dx > 0 and dy == 0) or (dx == 0 and dy > 0) or (dx == dy)):
-            return False
-
-        # Vérifier selon le type de mouvement
-        if dx == 0 or dy == 0:  # Mouvement horizontal ou vertical
-            return Mouvement._check_plus_movement(pawn, x, y, dx, dy, grid)
-        else:  # Mouvement diagonal
-            # Déterminer la direction du mouvement
-            x_step = 1 if x > pawn.x else -1
-            y_step = 1 if y > pawn.y else -1
-
-            # Vérifier qu'il n'y a pas de pion de type 1 sur le chemin
-            current_x = pawn.x + x_step
-            current_y = pawn.y + y_step
-
-            while current_x != x and current_y != y:
-                if grid.grid[current_y][current_x][-1] == 1:
-                    return False
-                current_x += x_step
-                current_y += y_step
-
-            return True
+    @staticmethod  
+    def legit_mouv(pawn, x, y, grid):  
+        """  
+        Vérifie si un mouvement est légitime pour un pion donné.  
+        
+        Args:  
+            pawn: Le pion à déplacer  
+            x: Coordonnée x de destination  
+            y: Coordonnée y de destination  
+            grid: La grille de jeu  
+            
+        Returns:  
+            bool: True si le mouvement est légitime, False sinon  
+        """  
+        # Vérifier si la destination est dans la grille et si le pion peut être empilé  
+        if (x < 0 or x >= len(grid.grid) or y < 0 or y >= len(grid.grid)):  
+            return False  
+            
+        if not (grid.grid[y][x][-1] > pawn.type or grid.grid[y][x][-1] == 0):  
+            return False  
+            
+        # Vérifier le type de mouvement  
+        if pawn.mouvement == "L":  
+            return Mouvement._check_L_movement(pawn, x, y)  
+        elif pawn.mouvement == "+":  
+            return Mouvement._check_plus_movement(pawn, x, y, grid)  
+        elif pawn.mouvement == "X":  
+            return Mouvement._check_X_movement(pawn, x, y, grid)  
+        elif pawn.mouvement == "*":  
+            return Mouvement._check_star_movement(pawn, x, y, grid)  
+        else:  
+            return False  
+    
+    @staticmethod  
+    def _check_L_movement(pawn, x, y):  
+        """Vérifie si le mouvement en L est valide."""  
+        dist = distance(pawn, x, y)  
+        return (dist[0] == 2 and dist[1] == 1) or (dist[0] == 1 and dist[1] == 2)  
+    
+    @staticmethod  
+    def _check_plus_movement(pawn, x, y, grid):  
+        """Vérifie si le mouvement orthogonal (+) est valide."""  
+        dist = distance(pawn, x, y)  
+        
+        # Le mouvement doit être soit horizontal soit vertical, pas les deux  
+        if not ((dist[0] > 0 and dist[1] == 0) or (dist[0] == 0 and dist[1] > 0)):  
+            return False  
+            
+        # Vérifier qu'il n'y a pas d'obstacles sur le chemin  
+        if dist[1] == 0:  # Mouvement horizontal  
+            start_x = min(pawn.x, x) + 1  
+            end_x = max(pawn.x, x)  
+            for i in range(start_x, end_x):  
+                if grid.grid[y][i][-1] != 0:  
+                    return False  
+        else:  # Mouvement vertical  
+            start_y = min(pawn.y, y) + 1  
+            end_y = max(pawn.y, y)  
+            for i in range(start_y, end_y):  
+                if grid.grid[i][x][-1] != 0:  
+                    return False  
+                    
+        return True  
+    
+    @staticmethod  
+    def _check_X_movement(pawn, x, y, grid):  
+        """Vérifie si le mouvement diagonal (X) est valide."""  
+        dist = distance(pawn, x, y)  
+        
+        # Le mouvement doit être diagonal (même distance en x et y)  
+        if dist[0] != dist[1]:  
+            return False  
+            
+        # Vérifier qu'il n'y a pas d'obstacles sur le chemin  
+        dx = 1 if x > pawn.x else -1  
+        dy = 1 if y > pawn.y else -1  
+        
+        curr_x, curr_y = pawn.x + dx, pawn.y + dy  
+        while curr_x != x and curr_y != y:  
+            if grid.grid[curr_y][curr_x][-1] != 0:  
+                return False  
+            curr_x += dx  
+            curr_y += dy  
+            
+        return True  
+    
+    @staticmethod  
+    def _check_star_movement(pawn, x, y, grid):  
+        """Vérifie si le mouvement en étoile (*) est valide."""  
+        # Le mouvement en étoile est soit un mouvement + soit un mouvement X  
+        return (Mouvement._check_plus_movement(pawn, x, y, grid) or   
+                Mouvement._check_X_movement(pawn, x, y, grid))
