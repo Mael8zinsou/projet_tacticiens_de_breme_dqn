@@ -48,7 +48,7 @@ class TacticiensEnv(Env):
         self.observation_space = Box(low=0, high=1, shape=(5, 5, 8), dtype=np.int8)
 
         # Définition de l'espace d'action
-        # Action discrète représentant l'index du mouvement dans la liste des mouvements possibles
+        # Action discrète représentant l'index du mouvement dans la liste des mouvements possibles 
         #self.action_space = spaces.Discrete(100)  # Nombre maximal estimé de mouvements possibles
         self.action_space = Discrete(100)  # Nombre maximal estimé de mouvements possibles
 
