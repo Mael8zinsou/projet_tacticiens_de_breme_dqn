@@ -41,25 +41,25 @@ from gym_env.tacticiens_env import TacticiensDeBremeEnv
 # env.close()
 
 env = TacticiensDeBremeEnv(opponent_ai_type="random")  # ou "minimax"
-check_env(env)  # Vérification de l'environnement
-# # Test aléatoire
-# obs = env.reset()
-# print("=== PIONS INITIAUX ===")
-# for pawn in env.game.pawns:
-#     print(f"{pawn.color} {pawn.type} @ ({pawn.x},{pawn.y})")
+# check_env(env)  # Vérification de l'environnement
+# Test aléatoire
+obs = env.reset()
+print("=== PIONS INITIAUX ===")
+for pawn in env.game.pawns:
+    print(f"{pawn.color} {pawn.type} @ ({pawn.x},{pawn.y})")
 
-# for _ in range(10):
-#     action = env.action_space.sample()
-#     obs, reward, done, info = env.step(action)
-#     print(f"Step: {_}, Reward: {reward}, Done: {done}")
-#     env.game.grid.display()  # Affiche la grille après chaque mouvement
-#     # Afficher l'état de l'environnement (optionnel)
-#     # env.render()  # Affiche l'état actuel de l'environnement
-#     if done:
-#         print("Exemple d'observation :\n", obs[:, :, 0])  # Affiche les propriétaires des bases
-#         print("Coqs présents :\n", obs[:, :, 4])  # Affiche les positions des Coqs
-#         for pawn in env.game.pawns:
-#             print(f"{pawn.color} {pawn.type} @ ({pawn.x},{pawn.y})")
+for _ in range(10):
+    action = env.action_space.sample()
+    obs, reward, done, info = env.step(action)
+    print(f"Step: {_}, Reward: {reward}, Done: {done}")
+    env.game.grid.display()  # Affiche la grille après chaque mouvement
+    # Afficher l'état de l'environnement (optionnel)
+    # env.render()  # Affiche l'état actuel de l'environnement
+    if done:
+        print("Exemple d'observation :\n", obs[:, :, 0])  # Affiche les propriétaires des bases
+        print("Coqs présents :\n", obs[:, :, 4])  # Affiche les positions des Coqs
+        for pawn in env.game.pawns:
+            print(f"{pawn.color} {pawn.type} @ ({pawn.x},{pawn.y})")
 
 # # Test avec un agent (exemple simple)
 # class RandomAgent:

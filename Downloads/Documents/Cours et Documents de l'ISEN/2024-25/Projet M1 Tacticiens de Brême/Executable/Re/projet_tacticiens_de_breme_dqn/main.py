@@ -11,8 +11,8 @@ from datetime import datetime
 # Parameters
 MANUAL_MODE = False # True pour placer les pions manuellement, False pour placement aléatoire
 USE_AI = True # True pour utiliser l'IA, False pour jouer manuellement
-AI_TYPES = (3, 2) # Types d'IA: 1 pour Minimax, 2 pour IA aléatoire, 3 pour SB3 DQN
-MAX_TURNS = 200 # Nombre maximum de tours avant d'arrêter la partie 
+AI_TYPES = (3, 1) # Types d'IA: 1 pour Minimax, 2 pour IA aléatoire, 3 pour SB3 DQN
+MAX_TURNS = 1000 # Nombre maximum de tours avant d'arrêter la partie 
 MAX_GAMES = 1 # Nombre de parties à jouer
 
 def main():
@@ -20,12 +20,22 @@ def main():
     Fonction principale du programme.
     Initialise le jeu et gère la boucle principale.
     """
+    global MANUAL_MODE, USE_AI, AI_TYPES, MAX_TURNS, MAX_GAMES
+
     # Initialisation du gestionnaire de données
     # Note: pour écraser un fichier CSV existant, définir overwrite=True
     data_manager = DataManager(False, "./data/dataset/game_RR.csv")
 
-    # Initialisation du jeu  
-    game = Game(data_manager, MANUAL_MODE, USE_AI, AI_TYPES)  
+    # Initialisation du jeu
+    print("Initialisation du jeu...")
+    print("Veuillez choisir le type d'IA, 1 pour Minimax, 2 pour IA aléatoire, 3 pour SB3 DQN")
+    AI_TYPES = list(AI_TYPES)  # Convertir le tuple en liste pour le modifier
+    AI_TYPES[0] = int(get_user_input("Type d'IA bleue: ", ["1", "2", "3"]))
+    AI_TYPES[1] = int(get_user_input("Type d'IA orange: ", ["1", "2", "3"]))
+    AI_TYPES = tuple(AI_TYPES)  # Reconvertir la liste en tuple après modification
+    print(f"IA bleue: {AI_TYPES[0]}, IA orange: {AI_TYPES[1]}")
+    
+    game = Game(data_manager, MANUAL_MODE, USE_AI, AI_TYPES)
 
     # Enregistrement du temps de début  
     start_time = datetime.now().strftime("%Y%m%d_%H%M%S")  
@@ -351,6 +361,26 @@ def get_ai_info(game, aiblue, aiorange):
             "color": "ORANGE"  
         }  
     ]  
+
+#Fonction utilitaire pour obtenir l'entrée utilisateur
+
+def get_user_input(message, valid_inputs):
+    """
+    Demande à l'utilisateur une entrée valide.
+
+    Args:  
+        message: Message à afficher  
+        valid_inputs: Liste des entrées valides  
+        
+    Returns:  
+        str: Entrée utilisateur valide  
+    """  
+    user_input = None  
+    while user_input not in valid_inputs:  
+        user_input = input(message)  
+        if user_input not in valid_inputs:  
+            print("Invalid input")  
+    return user_input
 
 if __name__ == "__main__":
     main()

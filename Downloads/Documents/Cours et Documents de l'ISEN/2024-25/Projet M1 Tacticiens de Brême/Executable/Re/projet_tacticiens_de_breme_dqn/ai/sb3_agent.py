@@ -10,7 +10,7 @@ class DQN_sb3_Agent:
     Compatible à la fois avec le moteur de jeu original et l'environnement Gym.
     """
 
-    def __init__(self, color: str, game=None, model_path: str = "./models/dqn_phase2.zip"):
+    def __init__(self, color: str, game=None, model_path: str = "./models/dqn_tacticiens_final.zip"):
         """
         Args:
             color: "blue" ou "orange"

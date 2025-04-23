@@ -51,40 +51,40 @@ class Grid:
         """  
         Affiche la grille de jeu avec les pions colorés.  
         """  
-        print("----")
-        for i in range(self.size):
-            row_str = "|"
-            for j in range(self.size):
-                stack = self.grid[i][j]
-                # Couleur bleue/orange selon le propriétaire de la base
-                if stack[0] == 0:
-                    color = Back.WHITE
-                else:
-                    pawn_color = next((p.color for p in self.all_pawns if p.x == j and p.y == i), None)
-                    color = Back.BLUE if pawn_color == "blue" else Back.RED if pawn_color == "orange" else Back.WHITE
-                stack_str = color + "".join(str(x) for x in stack).ljust(4) + Back.RESET
-                row_str += stack_str
-            print(row_str + "|")
-        print("----")
+        # print("----")
+        # for i in range(self.size):
+        #     row_str = "|"
+        #     for j in range(self.size):
+        #         stack = self.grid[i][j]
+        #         # Couleur bleue/orange selon le propriétaire de la base
+        #         if stack[0] == 0:
+        #             color = Back.WHITE
+        #         else:
+        #             pawn_color = next((p.color for p in self.all_pawns if p.x == j and p.y == i), None)
+        #             color = Back.BLUE if pawn_color == "blue" else Back.RED if pawn_color == "orange" else Back.WHITE
+        #         stack_str = color + "".join(str(x) for x in stack).ljust(4) + Back.RESET
+        #         row_str += stack_str
+        #     print(row_str + "|")
+        # print("----")
 
         # # commentez ce bloc pour désactiver l'affichage  
-        # print("----")  
-        # for i in range(self.size):  
-        #     print("|", end="")  
-        #     row = ""  
-        #     for j in range(self.size):  
-        #         if self.grid[i][j][0] != 0:  
-        #             for pawn_value in self.grid[i][j]:  
-        #                 for pawn in self.all_pawns:  
-        #                     if pawn.type == pawn_value and pawn.x == j and pawn.y == i:  
-        #                         if pawn.color == "blue":  
-        #                             row += Back.BLUE + str(pawn.type)  
-        #                         elif pawn.color == "orange":  
-        #                             row += Back.RED + str(pawn.type)  
-        #         else:  
-        #             row += Back.BLACK + "0 "  
-        #     print(row + Back.BLACK + "|")  
-        # print("----")  
+        print("----")  
+        for i in range(self.size):  
+            print("|", end="")  
+            row = ""  
+            for j in range(self.size):  
+                if self.grid[i][j][0] != 0:  
+                    for pawn_value in self.grid[i][j]:  
+                        for pawn in self.all_pawns:  
+                            if pawn.type == pawn_value and pawn.x == j and pawn.y == i:  
+                                if pawn.color == "blue":  
+                                    row += Back.BLUE + str(pawn.type)  
+                                elif pawn.color == "orange":  
+                                    row += Back.RED + str(pawn.type)  
+                else:  
+                    row += Back.BLACK + "0 "  
+            print(row + Back.BLACK + "|")  
+        print("----")  
         # Pour l'instant, l'affichage est activé  
         # pass  
 
